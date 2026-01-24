@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imperial Ultimate Prompt Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50: '#eef2ff', 100: '#e0e7ff', 500: '#6366f1', 600: '#4f46e5', 900: '#312e81' },
+                        slate: { 850: '#151e2e' }
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+        
+        :root { --primary: #6366f1; }
+        body { font-family: 'Outfit', sans-serif; transition: background-color 0.5s ease, color 0.5s ease; background-color: #f8fafc; color: #1e293b; }
+        .dark body { background-color: #020617; color: #e2e8f0; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .dark ::-webkit-scrollbar-track { background: #0f172a; }
+        .dark ::-webkit-scrollbar-thumb { background: #334155; }
+        .gradient-text { background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-panel { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: background-color 0.3s ease, border-color 0.3s ease; background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(99, 102, 241, 0.15); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .dark .glass-panel { background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(99, 102, 241, 0.2); box-shadow: none; }
+        .tab-btn { transition: all 0.3s ease; position: relative; }
+        .tab-btn.active { color: #4f46e5; background: rgba(99, 102, 241, 0.1); }
+        .dark .tab-btn.active { color: #fff; }
+        .tab-btn.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px; background: #6366f1; }
+        .chart-container { position: relative; width: 100%; height: 250px; }
+        @media (min-width: 768px) { .chart-container { height: 300px; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-indigo-500/30 pb-10 lg:pb-0">
+
+    <!-- Navbar -->
+    <nav class="border-b border-indigo-500/10 bg-white/80 dark:bg-slate-900/60 sticky top-0 z-50 backdrop-blur-xl">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg"><i class="fa-solid fa-crown text-sm"></i></div>
+                <h1 class="text-xl font-bold tracking-tight text-slate-800 dark:text-slate-100">Imperial<span class="gradient-text ml-1">Studio</span></h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <div id="sync-status" class="text-[10px] flex items-center gap-1 text-slate-400"><i class="fa-solid fa-circle text-gray-500"></i> Offline</div>
+                <button onclick="toggleTheme()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-indigo-100 dark:hover:bg-slate-700 transition"><i id="theme-icon" class="fa-solid fa-sun"></i></button>
+                <div class="h-4 w-px bg-slate-300 dark:bg-slate-700 mx-1"></div>
+                <button onclick="fullReset()" class="text-xs text-red-500 hover:text-red-600 transition"><i class="fa-solid fa-trash-can"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-3 sm:px-4 py-4 sm:py-6 max-w-[1600px]">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-[calc(100vh-100px)] h-auto">
+            
+            <!-- Left Controls -->
+            <div class="lg:col-span-2 flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0">
+                <button onclick="switchTab('core')" id="tab-core" class="tab-btn active p-3 rounded-xl text-sm font-semibold text-left bg-indigo-50 dark:bg-slate-800/50 text-indigo-600 dark:text-indigo-300 min-w-[120px]"><i class="fa-solid fa-layer-group mr-2"></i>Generator</button>
+                <button onclick="switchTab('visual')" id="tab-visual" class="tab-btn p-3 rounded-xl text-sm font-semibold text-left text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 min-w-[120px]"><i class="fa-solid fa-palette mr-2"></i>Visual</button>
+                <button onclick="switchTab('tech')" id="tab-tech" class="tab-btn p-3 rounded-xl text-sm font-semibold text-left text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 min-w-[120px]"><i class="fa-solid fa-microchip mr-2"></i>Teknis</button>
+                <button onclick="switchTab('analytics')" id="tab-analytics" class="tab-btn p-3 rounded-xl text-sm font-semibold text-left text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 min-w-[120px]"><i class="fa-solid fa-chart-pie mr-2"></i>Analytics</button>
+                <button onclick="switchTab('guide')" id="tab-guide" class="tab-btn p-3 rounded-xl text-sm font-semibold text-left text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 min-w-[120px]"><i class="fa-solid fa-book-open mr-2"></i>Guide</button>
+            </div>
+
+            <!-- Middle Controls Area -->
+            <div class="lg:col-span-5 flex flex-col gap-4 lg:h-full lg:overflow-hidden h-auto">
+                <div class="glass-panel p-4 sm:p-6 rounded-2xl lg:overflow-y-auto lg:flex-grow space-y-6 shadow-xl" id="controls-area">
+                    
+                    <!-- TAB: CORE -->
+                    <div id="content-core" class="space-y-6 animate-fade-in">
+                         <div class="flex gap-2 w-full bg-slate-50 dark:bg-slate-800/40 p-1 rounded-xl border border-slate-200 dark:border-slate-700">
+                            <label class="flex-1 cursor-pointer"><input type="radio" name="model" value="generic" class="peer sr-only" checked onchange="updateOutput()"><span class="block text-center py-1.5 rounded-md text-[10px] font-bold text-slate-500 dark:text-slate-400 peer-checked:bg-indigo-600 peer-checked:text-white transition">Stable Diff</span></label>
+                            <label class="flex-1 cursor-pointer"><input type="radio" name="model" value="midjourney" class="peer sr-only" onchange="updateOutput()"><span class="block text-center py-1.5 rounded-md text-[10px] font-bold text-slate-500 dark:text-slate-400 peer-checked:bg-indigo-600 peer-checked:text-white transition">Midjourney</span></label>
+                            <label class="flex-1 cursor-pointer"><input type="radio" name="model" value="dalle" class="peer sr-only" onchange="updateOutput()"><span class="block text-center py-1.5 rounded-md text-[10px] font-bold text-slate-500 dark:text-slate-400 peer-checked:bg-indigo-600 peer-checked:text-white transition">DALL-E 3</span></label>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Subjek Utama</label>
+                            <textarea id="subject" rows="3" class="w-full bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none resize-none" placeholder="Deskripsikan visi Baginda..."></textarea>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <select id="gender" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-[10px] outline-none" onchange="updateOutput()"><option value="">Gender</option><option value="male">Laki-laki</option><option value="female">Perempuan</option></select>
+                            <select id="age" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-[10px] outline-none" onchange="updateOutput()"><option value="">Usia</option><option value="adult">Dewasa</option><option value="teenager">Remaja</option></select>
+                            <select id="target-audience" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-[10px] outline-none" onchange="updateOutput()"><option value="">Target</option><option value="luxury">Luxury</option><option value="gen_z">Gen Z</option></select>
+                        </div>
+                         <div class="space-y-3 pt-2 border-t border-slate-200 dark:border-slate-700">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase">Kategori</label>
+                            <select id="quality-preset" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none" onchange="applyQualityPreset()">
+                                <option value="">-- Manual --</option>
+                                <optgroup label="Skenario Khusus"><option value="street_editorial_vintage">Street Editorial (Vintage) ⭐</option><option value="poetic_cinema_alley">Poetic Asian Cinema ⭐</option></optgroup>
+                                <optgroup label="Architecture"><option value="religious">Tempat Ibadah</option><option value="public_venue">Venue Publik</option></optgroup>
+                                <optgroup label="Professional"><option value="portrait_pro">Portrait</option><option value="product">Product</option><option value="casual">Fashion</option><option value="sports">Sports</option></optgroup>
+                            </select>
+                             <div id="sub-category-container" class="opacity-50 pointer-events-none transition-opacity">
+                                <select id="sub-category" class="w-full bg-indigo-50 dark:bg-slate-800 border border-indigo-200 dark:border-slate-700 rounded-lg p-2.5 text-indigo-700 dark:text-indigo-200 text-sm outline-none" onchange="updateOutput()"><option value="">-- Pilih Kategori Dulu --</option></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB: VISUAL -->
+                    <div id="content-visual" class="hidden space-y-6 animate-fade-in">
+                         <div class="grid grid-cols-2 gap-4">
+                            <select id="style" class="col-span-2 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none" onchange="updateOutput()"><option value="">Gaya Artistik</option><option value="Cyberpunk">Cyberpunk</option><option value="Cinematic">Cinematic</option></select>
+                            <select id="lighting" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none" onchange="updateOutput()"><option value="">Pencahayaan</option><option value="Cinematic Lighting">Cinematic</option><option value="Golden Hour">Golden Hour</option></select>
+                            <select id="colors" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none" onchange="updateOutput()"><option value="">Warna</option><option value="Vivid Colors">Vivid</option></select>
+                             <select id="background" class="col-span-2 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none" onchange="updateOutput()"><option value="auto">⚡ Background Otomatis</option><option value="Studio">Studio</option></select>
+                             <select id="material" class="hidden"><option value=""></option></select> <!-- Hidden but kept for logic -->
+                        </div>
+                        <div><label class="block text-xs font-bold uppercase mb-2">Mood</label><div class="flex flex-wrap gap-2" id="mood-chips"></div></div>
+                    </div>
+
+                    <!-- TAB: TECH -->
+                    <div id="content-tech" class="hidden space-y-6 animate-fade-in">
+                        <div class="grid grid-cols-2 gap-4">
+                             <select id="view-preset" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none" onchange="updateOutput()"><option value="">Angle</option><option value="High Angle">High Angle</option></select>
+                             <select id="pose" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none" onchange="updateOutput()"><option value="">Pose</option><option value="standing confidently">Standing</option></select>
+                        </div>
+                        <div>
+                             <label class="block text-xs font-bold uppercase mb-2">Rasio</label>
+                             <div class="grid grid-cols-4 gap-2">
+                                <label class="cursor-pointer"><input type="radio" name="ar" value="1:1" class="peer sr-only" checked onchange="updateOutput()"><div class="border border-slate-200 dark:border-slate-700 rounded p-1 text-center text-[10px] peer-checked:bg-indigo-600 peer-checked:text-white">1:1</div></label>
+                                <label class="cursor-pointer"><input type="radio" name="ar" value="16:9" class="peer sr-only" onchange="updateOutput()"><div class="border border-slate-200 dark:border-slate-700 rounded p-1 text-center text-[10px] peer-checked:bg-indigo-600 peer-checked:text-white">16:9</div></label>
+                                <label class="cursor-pointer"><input type="radio" name="ar" value="9:16" class="peer sr-only" onchange="updateOutput()"><div class="border border-slate-200 dark:border-slate-700 rounded p-1 text-center text-[10px] peer-checked:bg-indigo-600 peer-checked:text-white">9:16</div></label>
+                                <label class="cursor-pointer"><input type="radio" name="ar" value="4:5" class="peer sr-only" onchange="updateOutput()"><div class="border border-slate-200 dark:border-slate-700 rounded p-1 text-center text-[10px] peer-checked:bg-indigo-600 peer-checked:text-white">4:5</div></label>
+                             </div>
+                        </div>
+                         <!-- Sliders -->
+                        <div class="space-y-4">
+                            <div><div class="flex justify-between mb-1"><label class="text-[10px] font-bold">STYLIZE</label><span id="stylize-val" class="text-[10px]">100</span></div><input type="range" id="stylize" min="0" max="1000" value="100" class="w-full" oninput="document.getElementById('stylize-val').textContent = this.value; updateOutput()"></div>
+                            <div><div class="flex justify-between mb-1"><label class="text-[10px] font-bold">CHAOS</label><span id="chaos-val" class="text-[10px]">0</span></div><input type="range" id="chaos" min="0" max="100" value="0" class="w-full" oninput="document.getElementById('chaos-val').textContent = this.value; updateOutput()"></div>
+                            <div>
+                                <div class="flex justify-between mb-1"><label class="text-[10px] font-bold">SEED</label></div>
+                                <div class="flex gap-2"><input type="number" id="seed" placeholder="Random" class="flex-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded p-1 text-xs"><button onclick="document.getElementById('seed').value = Math.floor(Math.random()*999999); updateOutput()" class="bg-slate-200 dark:bg-slate-700 px-3 rounded text-xs"><i class="fa-solid fa-dice"></i></button></div>
+                            </div>
+                        </div>
+                    </div>
+                     <textarea id="negative" class="hidden"></textarea> <!-- Hidden but present to prevent errors -->
+
+                    <!-- TAB: ANALYTICS -->
+                    <div id="content-analytics" class="hidden space-y-6 animate-fade-in">
+                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="glass-panel p-4 rounded-xl h-64"><div class="chart-container"><canvas id="radarChart"></canvas></div></div>
+                            <div class="glass-panel p-4 rounded-xl h-64"><div class="chart-container"><canvas id="barChart"></canvas></div></div>
+                        </div>
+                    </div>
+
+                     <!-- TAB: GUIDE -->
+                    <div id="content-guide" class="hidden space-y-6 animate-fade-in">
+                        <div class="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
+                             <h3 class="font-bold mb-2">Publikasi (Hosting)</h3>
+                             <p class="text-sm mb-4">Untuk menyimpan riwayat secara online, Baginda perlu mengkonfigurasi Firebase. Jika hanya menggunakan index.html ini secara lokal, riwayat tersimpan di browser.</p>
+                             <pre class="bg-black text-green-400 p-3 rounded text-xs overflow-x-auto">
+// Konfigurasi Firebase (Isi dengan milik Baginda saat deploy)
+// const firebaseConfig = { ... };
+                             </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Output -->
+            <div class="lg:col-span-5 flex flex-col lg:h-full h-auto gap-4 mt-8 lg:mt-0">
+                <div class="glass-panel rounded-2xl p-1 flex-grow flex flex-col border-indigo-500/20 shadow-xl relative overflow-hidden min-h-[300px]">
+                    <div class="bg-white/80 dark:bg-slate-900/80 p-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center backdrop-blur-md">
+                        <span class="font-bold text-sm">Prompt Output</span>
+                        <span id="token-count" class="text-[10px] bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">0 chars</span>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-900 p-6 flex-grow overflow-y-auto relative custom-scrollbar transition-colors">
+                        <div id="output-text" class="font-mono text-sm leading-relaxed whitespace-pre-wrap selection:bg-indigo-200 dark:selection:bg-indigo-500/30">...</div>
+                    </div>
+                    <div class="p-4 bg-white/80 dark:bg-slate-800/80 border-t flex gap-3">
+                        <button onclick="copyToClipboard()" class="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-3 rounded-lg shadow-lg active:scale-95">Salin</button>
+                        <button onclick="saveToHistory()" class="px-4 bg-slate-200 dark:bg-slate-700 rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition"><i class="fa-regular fa-bookmark"></i></button>
+                    </div>
+                </div>
+                
+                 <div class="glass-panel rounded-xl p-4 h-[250px] flex flex-col shadow-lg">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xs font-bold uppercase">Riwayat</span>
+                        <select id="history-filter" class="bg-transparent text-[10px] outline-none" onchange="loadHistory()"><option value="all">Semua</option></select>
+                        <button onclick="clearHistory()" class="text-[10px] text-red-500">Clear</button>
+                    </div>
+                    <div id="history-list" class="flex-grow overflow-y-auto space-y-2 pr-1 custom-scrollbar"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FIREBASE SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // User Provided Config
+        const userFirebaseConfig = {
+          apiKey: "AIzaSyBVUDPpQaZ8GkfCZya0gT2k8GLnWJKun-A",
+          authDomain: "promtai-cfb29.firebaseapp.com",
+          projectId: "promtai-cfb29",
+          storageBucket: "promtai-cfb29.firebasestorage.app",
+          messagingSenderId: "361929858262",
+          appId: "1:361929858262:web:050200e5dcb18c4885bd77"
+        };
+
+        window.db = null;
+        window.auth = null;
+        window.user = null;
+        window.appId = 'imperial-studio'; 
+
+        async function initFirebase() {
+            try {
+                if (userFirebaseConfig && userFirebaseConfig.apiKey) {
+                    const app = initializeApp(userFirebaseConfig);
+                    window.auth = getAuth(app);
+                    window.db = getFirestore(app);
+
+                    onAuthStateChanged(window.auth, (u) => {
+                        if (u) {
+                            window.user = u;
+                            document.getElementById('sync-status').innerHTML = '<i class="fa-solid fa-circle text-green-500"></i> Cloud Active';
+                            loadHistoryFromCloud();
+                        } else {
+                            signInAnonymously(window.auth).catch(console.error);
+                        }
+                    });
+                } else {
+                    console.log("No Firebase config found.");
+                }
+            } catch (e) {
+                console.log("Firebase init skipped/failed", e);
+            }
+        }
+        
+        window.saveToCloud = async (text, subject, category) => {
+             if (!window.db || !window.user) return false; 
+             try {
+                await addDoc(collection(window.db, 'artifacts', window.appId, 'users', window.user.uid, 'prompts'), {
+                    prompt: text,
+                    subject: subject,
+                    categoryLabel: category,
+                    timestamp: new Date().toISOString()
+                });
+                return true;
+             } catch(e) {
+                 console.error("Cloud save failed", e);
+                 return false;
+             }
+        };
+
+        function loadHistoryFromCloud() {
+             if (!window.db || !window.user) return;
+             const q = collection(window.db, 'artifacts', window.appId, 'users', window.user.uid, 'prompts');
+             onSnapshot(q, (snapshot) => {
+                 let history = [];
+                 snapshot.forEach(doc => history.push(doc.data()));
+                 history.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+                 localStorage.setItem('imp_history', JSON.stringify(history));
+                 if(window.updateHistoryFilters) window.updateHistoryFilters();
+                 if(window.loadHistory) window.loadHistory();
+             }, (error) => { console.error("History sync error", error); });
+        }
+
+        initFirebase();
+    </script>
+    
+    <script>
+        // --- HELPERS ---
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                const context = this;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), wait);
+            };
+        }
+
+        // --- DATA ---
+        const moods = ["Ethereal", "Ominous", "Cheerful", "Melancholic", "Epic", "Serene", "Chaotic", "Dreamy", "Mysterious", "Romantic", "Cozy", "Intense"];
+        const subCategories = {
+            'street_editorial_vintage': [{ val: 'default', label: 'Default', prompt: '' }],
+            'poetic_cinema_alley': [{ val: 'default', label: 'Default', prompt: '' }],
+            'religious': [{ val: 'mosque', label: 'Mesjid', prompt: ', grand mosque' }, { val: 'church', label: 'Gereja', prompt: ', gothic cathedral, stained glass windows, spires' }],
+            'public_venue': [{ val: 'stadium', label: 'Stadion', prompt: ', huge sports stadium, floodlights, crowd in distance' }, { val: 'museum', label: 'Museum', prompt: ', contemporary art museum, clean lines' }],
+            'historical': [{ val: 'castle', label: 'Kastil', prompt: ', medieval castle, stone walls, moat' }, { val: 'ruins', label: 'Reruntuhan', prompt: ', ancient ruins, broken pillars, overgrown vines' }],
+            'commercial_arch': [{ val: 'mall', label: 'Mall', prompt: ', modern shopping mall interior, atrium, escalators' }, { val: 'hotel', label: 'Hotel', prompt: ', luxury beach resort, swimming pool' }],
+            'sports': [{ val: 'soccer', label: 'Sepak Bola', prompt: ', playing soccer, dynamic kicking pose, stadium lights background' }, { val: 'basketball', label: 'Basket', prompt: ', playing basketball, slam dunk action, sweat details' }],
+            'food_porn': [{ val: 'dessert', label: 'Dessert', prompt: ', delicious dessert, sweet, creamy texture, macro shot' }, { val: 'main_course', label: 'Main Course', prompt: ', gourmet main course, steaming hot, rich texture' }],
+            'product': [{ val: 'apparel', label: 'Pakaian', prompt: ', clothing product photography, ghost mannequin effect' }, { val: 'bag_fashion', label: 'Tas & Aksesoris', prompt: ', fashion accessory product shot, bag worn by model' }, { val: 'tech', label: 'Gadget', prompt: ', sleek smartphone product shot, clean studio lighting' }],
+            'casual': [{ val: 'streetwear', label: 'Streetwear', prompt: ', streetwear fashion, hoodie' }, { val: 'vintage', label: 'Vintage', prompt: ', vintage 90s fashion' }],
+            'concept_art': [{ val: 'character_design', label: 'Karakter', prompt: ', character design sheet' }, { val: 'environment', label: 'Environment', prompt: ', wide environment concept art' }],
+            'portrait_pro': [{ val: 'business', label: 'Bisnis', prompt: ', professional headshot' }, { val: 'fashion_editorial', label: 'Fashion', prompt: ', high fashion editorial' }],
+            'landscape_nature': [{ val: 'mountain', label: 'Gunung', prompt: ', majestic snowy mountains' }, { val: 'beach', label: 'Pantai', prompt: ', tropical beach, turquoise water' }],
+            'street_photo': [{ val: 'night_rain', label: 'Malam Hujan', prompt: ', cyberpunk city street at night' }, { val: 'market', label: 'Pasar', prompt: ', busy traditional market' }],
+            'macro_detail': [{ val: 'insect', label: 'Serangga', prompt: ', macro shot of an insect' }, { val: 'flower', label: 'Bunga', prompt: ', macro shot of a flower center' }],
+            'arch_modern': [{ val: 'modern_house', label: 'Rumah', prompt: ', modern minimalist house' }, { val: 'skyscraper', label: 'Gedung', prompt: ', towering skyscraper' }],
+            'dailylife': [{ val: 'working', label: 'Kerja', prompt: ', person working on laptop' }, { val: 'reading', label: 'Baca', prompt: ', reading a book' }],
+            'automotive': [{ val: 'supercar', label: 'Supercar', prompt: ', luxury supercar' }, { val: 'classic', label: 'Klasik', prompt: ', vintage classic car' }],
+            'fantasy_rpg': [{ val: 'warrior', label: 'Warrior', prompt: ', armored knight' }, { val: 'mage', label: 'Mage', prompt: ', wizard casting spell' }],
+            'pixel_retro': [{ val: '16bit', label: '16-bit', prompt: ', 16-bit pixel art' }, { val: 'character_sprite', label: 'Sprite', prompt: ', pixel art character sprite' }],
+            'vector_flat': [{ val: 'icon', label: 'Icon', prompt: ', app icon design' }, { val: 'illustration', label: 'Ilustrasi', prompt: ', flat vector illustration' }],
+            'sticker_cute': [{ val: 'animal', label: 'Hewan', prompt: ', cute animal sticker' }, { val: 'food', label: 'Makanan', prompt: ', cute food sticker' }],
+            'logo_minimal': [{ val: 'wordmark', label: 'Teks', prompt: ', minimalist wordmark logo' }, { val: 'emblem', label: 'Simbol', prompt: ', simple geometric symbol logo' }],
+            'character_3d': [{ val: 'pixar', label: 'Pixar', prompt: ', pixar style character' }, { val: 'realistic_3d', label: 'Realistik', prompt: ', hyperrealistic 3d character' }],
+            'interior_design': [{ val: 'living_room', label: 'Ruang Tamu', prompt: ', modern living room' }, { val: 'kitchen', label: 'Dapur', prompt: ', luxury modern kitchen' }],
+            'anime': [{ val: 'action', label: 'Action', prompt: ', dynamic anime action scene' }, { val: 'slice_of_life', label: 'Slice of Life', prompt: ', peaceful anime school setting' }],
+            'painting': [{ val: 'oil', label: 'Oil', prompt: ', oil painting texture' }, { val: 'watercolor', label: 'Watercolor', prompt: ', watercolor painting' }]
+        };
+
+        // --- GLOBAL SCOPE ---
+        let els = {};
+        let radarChart;
+
+        // --- FUNCTIONS ---
+        function renderMoods() {
+            const container = document.getElementById('mood-chips');
+            if(!container) return;
+            container.innerHTML = '';
+            moods.forEach(m => {
+                const btn = document.createElement('button');
+                btn.className = "px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded text-[10px] hover:bg-indigo-100 dark:hover:bg-slate-600 transition";
+                btn.textContent = m;
+                btn.onclick = () => {
+                    const sub = document.getElementById('subject');
+                    if(sub) { sub.value += `, ${m} atmosphere`; window.updateOutput(); }
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function getAutoBackground(style, subject) {
+            if((style && style.includes('Cyberpunk')) || (subject && subject.includes('neon'))) return "futuristic city";
+            if(subject.toLowerCase().includes('mosque')) return "blue sky, courtyard";
+            return "detailed background";
+        }
+
+        window.toggleTheme = function() {
+             const html = document.documentElement;
+             const isDark = html.classList.toggle('dark');
+             const icon = document.getElementById('theme-icon');
+             if(icon) icon.className = isDark ? "fa-solid fa-sun" : "fa-solid fa-moon";
+             localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        };
+
+        window.updateOutput = function() {
+            if(!document.getElementById('subject')) return;
+            
+            const subject = document.getElementById('subject').value;
+            const negative = document.getElementById('negative')?.value || "";
+            const gender = document.getElementById('gender')?.value || "";
+            const age = document.getElementById('age')?.value || "";
+            const targetAudience = document.getElementById('target-audience')?.value || "";
+            
+            const model = document.querySelector('input[name="model"]:checked')?.value || 'generic';
+            const ar = document.querySelector('input[name="ar"]:checked')?.value || '1:1';
+            const mainCat = document.getElementById('quality-preset')?.value || "";
+            const subCatVal = document.getElementById('sub-category')?.value || "";
+            const poseVal = document.getElementById('pose')?.value || "";
+            const style = document.getElementById('style')?.value || "";
+            const lighting = document.getElementById('lighting')?.value || "";
+            const background = document.getElementById('background')?.value || "";
+            const stylize = document.getElementById('stylize')?.value || "100";
+            const chaos = document.getElementById('chaos')?.value || "0";
+            const seed = document.getElementById('seed')?.value || "";
+
+            let promptSegments = [];
+            
+            // 1. Subject & Demographics
+            let processedSubject = subject;
+            let demography = [];
+            if (gender) demography.push(gender);
+            if (age) demography.push(age);
+            if (demography.length > 0) processedSubject += `, ${demography.join(" ")}`;
+
+            // 2. Masterpiece Logic
+            if (mainCat === 'street_editorial_vintage') {
+                processedSubject += ", high-angle shot from balcony looking down, full body visible with wide negative space. Subject positioned slightly left of center, relaxed and confident expression looking up at camera, left hand holding white takeaway coffee cup, right hand making Metal/Rock On sign. Outfit based on reference. Background: rough grey asphalt with tire marks and dust, partial view of Silver Carry 1.5 Real Van on right edge, soft tree branch shadows on ground. Lighting: warm late-afternoon golden hour from top-left, crisp highlights on clothes and car. Shot on Canon AE-1, analog vintage feel, editorial street style, slight desaturation, subtle film grain, realistic texture";
+            } else if (mainCat === 'poetic_cinema_alley') {
+                processedSubject += ", turning toward camera with calm yet intense gaze. Lighting: strong sunlight hitting front body creating high contrast. Background: alley flanked by tall concrete walls, older uneven cement wall, posters. Overhead: dense green leaves with small red rose apples. Aesthetic: film photography feel, fine grain, dramatic contrast, poetic cinematic mood.";
+            } else if (mainCat && subCatVal && subCategories[mainCat]) {
+                const sub = subCategories[mainCat].find(s => s.val === subCatVal);
+                if (sub) processedSubject += sub.prompt;
+            }
+
+            if (poseVal && !['street_editorial_vintage', 'poetic_cinema_alley'].includes(mainCat)) {
+                processedSubject += `, ${poseVal}`;
+            }
+
+            if (processedSubject) promptSegments.push(processedSubject);
+
+            // 3. Environment & Style
+            if (!['street_editorial_vintage', 'poetic_cinema_alley'].includes(mainCat)) {
+                if (background === 'auto') {
+                    promptSegments.push(getAutoBackground(style, subject));
+                } else if (background) {
+                    promptSegments.push(`${background} background`);
+                }
+                
+                if (style) promptSegments.push(`${style} style`);
+                if (lighting) promptSegments.push(lighting);
+            }
+
+            // 4. Target Audience
+            if (targetAudience) {
+                if (targetAudience === 'gen_z') promptSegments.push("trendy aesthetic, vibrant");
+                if (targetAudience === 'luxury') promptSegments.push("luxurious, elegant");
+                if (targetAudience === 'corporate') promptSegments.push("professional, clean");
+            }
+
+            promptSegments.push("masterpiece, 8k, best quality");
+
+            let finalPrompt = promptSegments.join(", ");
+            let params = "";
+
+            if (model === 'midjourney') {
+                params = ` --ar ${ar} --v 6.0 --s ${stylize} --c ${chaos}`;
+                if (seed) params += ` --seed ${seed}`;
+                if (negative) params += ` --no ${negative}`;
+                finalPrompt += `<span class="text-indigo-500 font-bold">${params}</span>`;
+            } else {
+                if (negative) finalPrompt += `\nNegative: ${negative}`;
+            }
+
+            const outEl = document.getElementById('output-text');
+            if(outEl) outEl.innerHTML = finalPrompt || "(Menunggu titah Baginda...)";
+            document.getElementById('token-count').innerText = Math.floor(finalPrompt.length / 4) + " Tokens";
+
+            // Charts
+            if(radarChart && document.getElementById('content-analytics') && !document.getElementById('content-analytics').classList.contains('hidden')) {
+                 radarChart.data.datasets[0].data = [prompt.length/10, 5, 5, 5, 5];
+                 radarChart.update();
+            }
+        };
+
+        window.saveToHistory = async function() {
+            const text = document.getElementById('output-text')?.innerText;
+            const subj = document.getElementById('subject')?.value || "Untitled";
+            const cat = document.getElementById('quality-preset')?.value || "Manual";
+            
+            if(window.saveToCloud) {
+                const cloudSuccess = await window.saveToCloud(text, subj, cat);
+                if(cloudSuccess) return; 
+            }
+
+            const item = { prompt: text, subject: subj, categoryLabel: cat, timestamp: new Date().toLocaleTimeString() };
+            let h = JSON.parse(localStorage.getItem('imp_history') || '[]');
+            h.unshift(item);
+            localStorage.setItem('imp_history', JSON.stringify(h));
+            window.loadHistory();
+            window.showToast("Disimpan");
+        };
+
+        window.loadHistory = function() {
+             const list = document.getElementById('history-list');
+             const filterEl = document.getElementById('history-filter');
+             if(!list) return;
+             
+             const h = JSON.parse(localStorage.getItem('imp_history') || '[]');
+             const filter = filterEl ? filterEl.value : 'all';
+             
+             list.innerHTML = '';
+             
+             const filtered = filter === 'all' ? h : h.filter(item => item.categoryLabel === filter);
+
+             if(filtered.length === 0) {
+                 list.innerHTML = '<div class="text-center text-[10px] text-slate-400 py-4">Kosong</div>';
+                 return;
+             }
+
+             filtered.forEach(item => {
+                 const div = document.createElement('div');
+                 div.className = "p-2 bg-slate-100 dark:bg-slate-700/50 rounded mb-2 text-xs cursor-pointer hover:bg-indigo-50 dark:hover:bg-slate-700 transition-colors";
+                 div.innerHTML = `<div class="font-bold text-[10px] text-slate-500">${item.timestamp}</div><div class="truncate text-slate-700 dark:text-slate-200">${item.subject}</div>`;
+                 div.onclick = () => {
+                     const sub = document.getElementById('subject');
+                     if(sub) {
+                         sub.value = item.prompt;
+                         window.updateOutput();
+                     }
+                 };
+                 list.appendChild(div);
+             });
+        };
+        
+        window.updateHistoryFilters = function() {
+            const history = JSON.parse(localStorage.getItem('imp_history') || '[]');
+            const uniqueCategories = new Set();
+            history.forEach(item => {
+                if(item.categoryLabel) uniqueCategories.add(item.categoryLabel);
+            });
+            const filterEl = document.getElementById('history-filter');
+            if(filterEl) {
+                const currentVal = filterEl.value;
+                filterEl.innerHTML = '<option value="all">Semua</option>';
+                uniqueCategories.forEach(cat => {
+                    const option = document.createElement('option');
+                    option.value = cat;
+                    option.textContent = cat;
+                    filterEl.appendChild(option);
+                });
+                 if ([...filterEl.options].some(o => o.value === currentVal)) {
+                    filterEl.value = currentVal;
+                }
+            }
+        };
+
+        window.switchTab = function(t) {
+            ['core','visual','tech','analytics','guide'].forEach(x => {
+                document.getElementById('content-'+x)?.classList.add('hidden');
+                document.getElementById('tab-'+x)?.classList.remove('active', 'bg-indigo-50', 'text-indigo-600');
+            });
+            document.getElementById('content-'+t)?.classList.remove('hidden');
+            document.getElementById('tab-'+t)?.classList.add('active', 'bg-indigo-50', 'text-indigo-600');
+            
+            if(t === 'analytics' && !radarChart) initCharts();
+        };
+        
+        window.applyQualityPreset = function() {
+             const val = document.getElementById('quality-preset').value;
+             const sub = document.getElementById('sub-category');
+             const subCont = document.getElementById('sub-category-container');
+             
+             sub.innerHTML = '<option value="">-- Pilih --</option>';
+             if(subCategories[val]) {
+                 subCont.classList.remove('opacity-50', 'pointer-events-none');
+                 subCategories[val].forEach(x => {
+                     const op = document.createElement('option');
+                     op.value = x.val;
+                     op.textContent = x.label;
+                     sub.appendChild(op);
+                 });
+             } else {
+                 subCont.classList.add('opacity-50', 'pointer-events-none');
+             }
+             window.updateOutput();
+        };
+        
+        window.fillNegativeDefaults = function() {
+            const neg = document.getElementById('negative');
+            if(neg) { neg.value = "ugly, bad quality"; window.updateOutput(); }
+        };
+        
+        window.copyToClipboard = function() {
+             const t = document.getElementById('output-text');
+             if(t) {
+                 const ta = document.createElement('textarea');
+                 ta.value = t.innerText;
+                 document.body.appendChild(ta);
+                 ta.select();
+                 document.execCommand('copy');
+                 document.body.removeChild(ta);
+                 window.showToast("Disalin ke Clipboard");
+             }
+        };
+
+        window.showToast = function(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 2500);
+        }
+        
+        window.fullReset = function() {
+             if(confirm("Reset?")) location.reload();
+        };
+
+        function initCharts() {
+            const cvs = document.getElementById('radarChart');
+            if(cvs) {
+                radarChart = new Chart(cvs, {
+                    type: 'radar',
+                    data: { labels: ['Subject','Style','Tech','Light','Creative'], datasets: [{ label: 'Balance', data:[5,5,5,5,5], backgroundColor: 'rgba(99,102,241,0.2)', borderColor: '#6366f1' }] },
+                    options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { r: { suggestedMin: 0, suggestedMax: 10 } } }
+                });
+            }
+            const bar = document.getElementById('barChart');
+            if(bar) {
+                new Chart(bar, { type: 'bar', data: { labels: ['Tokens'], datasets: [{ data:[10], backgroundColor: '#6366f1' }] }, options: { maintainAspectRatio: false, plugins: { legend: { display: false } } } });
+            }
+        }
+
+        // Main Init Function
+        function init() {
+            // Restore theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.classList.remove('dark');
+                const icon = document.getElementById('theme-icon');
+                if(icon) icon.className = "fa-solid fa-sun text-yellow-500";
+            }
+
+            // POPULATE DOM ELEMENTS SAFELY
+            els = {
+                subject: document.getElementById('subject'),
+                gender: document.getElementById('gender'),
+                age: document.getElementById('age'),
+                targetAudience: document.getElementById('target-audience'),
+                negative: document.getElementById('negative'),
+                style: document.getElementById('style'),
+                lighting: document.getElementById('lighting'),
+                colors: document.getElementById('colors'),
+                material: document.getElementById('material'),
+                background: document.getElementById('background'),
+                qualityPreset: document.getElementById('quality-preset'),
+                subCategory: document.getElementById('sub-category'),
+                subCategoryContainer: document.getElementById('sub-category-container'),
+                view: document.getElementById('view-preset'),
+                pose: document.getElementById('pose'),
+                stylize: document.getElementById('stylize'),
+                chaos: document.getElementById('chaos'),
+                seed: document.getElementById('seed'),
+                output: document.getElementById('output-text'),
+                history: document.getElementById('history-list'),
+                historyFilter: document.getElementById('history-filter'),
+                moodChips: document.getElementById('mood-chips'),
+                radarCanvas: document.getElementById('radarChart'),
+                barCanvas: document.getElementById('barChart')
+            };
+
+            // Init Moods
+            renderMoods();
+            
+            // Init History
+            window.updateHistoryFilters();
+            window.loadHistory();
+
+            // Event Listeners with DEBOUNCE
+            const debouncedUpdate = debounce(window.updateOutput, 300);
+
+            // Text Inputs (Typing) -> Debounce
+            if(els.subject) els.subject.addEventListener('input', debouncedUpdate);
+            if(els.negative) els.negative.addEventListener('input', debouncedUpdate);
+
+            // Selects/Radios (Clicking) -> Immediate
+            const selects = document.querySelectorAll('select');
+            selects.forEach(s => s.addEventListener('change', window.updateOutput));
+
+            const radios = document.querySelectorAll('input[type="radio"], input[type="range"]');
+            radios.forEach(r => r.addEventListener('input', window.updateOutput));
+
+            window.updateOutput();
+        }
+
+        // Boot
+        window.addEventListener('DOMContentLoaded', () => {
+            init();
+        });
+
+    </script>
+</body>
+</html>

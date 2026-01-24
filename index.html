@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Imperial Ultimate Prompt Generator</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -23,9 +22,7 @@
             }
         }
     </script>
-    <!-- Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
@@ -33,44 +30,41 @@
         
         :root { --primary: #6366f1; }
         
+        /* Optimized Background */
         body { 
             font-family: 'Outfit', sans-serif; 
-            transition: background-color 0.5s ease, color 0.5s ease; 
+            transition: background-color 0.3s ease;
             background-color: #f8fafc; 
-            background-image: radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.05), transparent 25%), radial-gradient(circle at 85% 30%, rgba(168, 85, 247, 0.05), transparent 25%);
             color: #1e293b; 
         }
         
         .dark body { 
             background-color: #020617; 
-            background-image: radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.08), transparent 25%), radial-gradient(circle at 85% 30%, rgba(168, 85, 247, 0.08), transparent 25%);
             color: #e2e8f0; 
         }
 
-        /* Scrollbar */
+        /* Reduced Complexity Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-        .dark ::-webkit-scrollbar-track { background: #0f172a; }
         .dark ::-webkit-scrollbar-thumb { background: #334155; }
 
-        /* Utilities */
-        .gradient-text { background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .gradient-text { background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
+        /* Optimized Glass Panel - Reduced Blur */
         .glass-panel { 
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); 
-            transition: background-color 0.3s ease, border-color 0.3s ease; 
-            background: rgba(255, 255, 255, 0.7); 
-            border: 1px solid rgba(99, 102, 241, 0.15); 
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); 
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); 
+            background: rgba(255, 255, 255, 0.85); 
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1); 
         }
         .dark .glass-panel { 
-            background: rgba(30, 41, 59, 0.6); 
-            border: 1px solid rgba(99, 102, 241, 0.2); 
+            background: rgba(30, 41, 59, 0.7); 
+            border: 1px solid rgba(99, 102, 241, 0.1); 
             box-shadow: none; 
         }
 
-        .tab-btn { transition: all 0.3s ease; position: relative; }
+        .tab-btn { transition: color 0.2s, background-color 0.2s; position: relative; }
         .tab-btn.active { color: #4f46e5; background: rgba(99, 102, 241, 0.1); }
         .dark .tab-btn.active { color: #fff; }
         .tab-btn.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px; background: #6366f1; }
@@ -78,13 +72,14 @@
         .chart-container { position: relative; width: 100%; height: 250px; }
         @media (min-width: 768px) { .chart-container { height: 300px; } }
 
+        /* Animation - Hardware Accelerated */
+        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; will-change: opacity, transform; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
-        
+
         .custom-select {
             appearance: none;
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236366f1' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 0.75rem center;
+            background-position: right 0.5rem center;
             background-repeat: no-repeat;
             background-size: 1.25em 1.25em;
         }
@@ -93,14 +88,14 @@
 <body class="min-h-screen flex flex-col selection:bg-indigo-500/30 pb-10 lg:pb-0">
 
     <!-- Navbar -->
-    <nav class="border-b border-indigo-500/10 bg-white/80 dark:bg-slate-900/60 sticky top-0 z-50 backdrop-blur-xl">
-        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <nav class="border-b border-indigo-500/10 bg-white/90 dark:bg-slate-900/90 sticky top-0 z-50 backdrop-blur-sm">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg"><i class="fa-solid fa-crown text-sm"></i></div>
+                <div class="w-8 h-8 rounded bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-md"><i class="fa-solid fa-crown text-sm"></i></div>
                 <h1 class="text-xl font-bold tracking-tight text-slate-800 dark:text-slate-100">Imperial<span class="gradient-text ml-1">Studio</span></h1>
             </div>
             <div class="flex items-center gap-3">
-                <div id="sync-status" class="text-[10px] flex items-center gap-1 text-slate-400"><i class="fa-solid fa-circle text-gray-500"></i> Offline</div>
+                <div id="sync-status" class="text-[10px] flex items-center gap-1 text-slate-400 font-mono"><i class="fa-solid fa-circle text-gray-500"></i> Offline</div>
                 <button onclick="toggleTheme()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-indigo-100 dark:hover:bg-slate-700 transition"><i id="theme-icon" class="fa-solid fa-sun"></i></button>
                 <div class="h-4 w-px bg-slate-300 dark:bg-slate-700 mx-1"></div>
                 <button onclick="fullReset()" class="text-xs text-red-500 hover:text-red-600 transition"><i class="fa-solid fa-trash-can"></i></button>
@@ -110,7 +105,7 @@
 
     <!-- Main Content -->
     <main class="flex-grow container mx-auto px-3 sm:px-4 py-4 sm:py-6 max-w-[1600px]">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-[calc(100vh-100px)] h-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 lg:h-[calc(100vh-90px)] h-auto">
             
             <!-- Left Controls -->
             <div class="lg:col-span-2 flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0">
@@ -123,35 +118,97 @@
 
             <!-- Middle Controls Area -->
             <div class="lg:col-span-5 flex flex-col gap-4 lg:h-full lg:overflow-hidden h-auto">
-                <div class="glass-panel p-4 sm:p-6 rounded-2xl lg:overflow-y-auto lg:flex-grow space-y-6 shadow-xl" id="controls-area">
+                <div class="glass-panel p-4 sm:p-5 rounded-2xl lg:overflow-y-auto lg:flex-grow space-y-5 shadow-sm" id="controls-area">
                     
                     <!-- TAB: CORE -->
-                    <div id="content-core" class="space-y-6 animate-fade-in">
-                         <div class="flex gap-2 w-full bg-slate-50 dark:bg-slate-800/40 p-1 rounded-xl border border-slate-200 dark:border-slate-700">
-                            <label class="flex-1 cursor-pointer"><input type="radio" name="model" value="generic" class="peer sr-only" checked onchange="updateOutput()"><span class="block text-center py-1.5 rounded-md text-[10px] font-bold text-slate-500 dark:text-slate-400 peer-checked:bg-indigo-600 peer-checked:text-white transition">Stable Diff</span></label>
-                            <label class="flex-1 cursor-pointer"><input type="radio" name="model" value="midjourney" class="peer sr-only" onchange="updateOutput()"><span class="block text-center py-1.5 rounded-md text-[10px] font-bold text-slate-500 dark:text-slate-400 peer-checked:bg-indigo-600 peer-checked:text-white transition">Midjourney</span></label>
-                            <label class="flex-1 cursor-pointer"><input type="radio" name="model" value="dalle" class="peer sr-only" onchange="updateOutput()"><span class="block text-center py-1.5 rounded-md text-[10px] font-bold text-slate-500 dark:text-slate-400 peer-checked:bg-indigo-600 peer-checked:text-white transition">DALL-E 3</span></label>
+                    <div id="content-core" class="space-y-5 animate-fade-in">
+                         <div class="flex gap-2 w-full bg-slate-50 dark:bg-slate-800/40 p-1 rounded-xl border border-slate-200 dark:border-slate-700 overflow-x-auto">
+                            <label class="flex-1 cursor-pointer min-w-[80px]"><input type="radio" name="model" value="generic" class="peer sr-only" checked><span class="block text-center py-1.5 rounded-md text-[10px] font-bold text-slate-500 dark:text-slate-400 peer-checked:bg-indigo-600 peer-checked:text-white transition whitespace-nowrap">Stable Diff</span></label>
+                            <label class="flex-1 cursor-pointer min-w-[80px]"><input type="radio" name="model" value="midjourney" class="peer sr-only"><span class="block text-center py-1.5 rounded-md text-[10px] font-bold text-slate-500 dark:text-slate-400 peer-checked:bg-indigo-600 peer-checked:text-white transition whitespace-nowrap">Midjourney</span></label>
+                            <label class="flex-1 cursor-pointer min-w-[80px]"><input type="radio" name="model" value="dalle" class="peer sr-only"><span class="block text-center py-1.5 rounded-md text-[10px] font-bold text-slate-500 dark:text-slate-400 peer-checked:bg-indigo-600 peer-checked:text-white transition whitespace-nowrap">DALL-E 3</span></label>
+                            <label class="flex-1 cursor-pointer min-w-[80px]"><input type="radio" name="model" value="gemini" class="peer sr-only"><span class="block text-center py-1.5 rounded-md text-[10px] font-bold text-slate-500 dark:text-slate-400 peer-checked:bg-indigo-600 peer-checked:text-white transition whitespace-nowrap">Gemini Pro</span></label>
                         </div>
                         <div class="space-y-2">
-                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Subjek Utama</label>
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Subjek Utama</label>
                             <textarea id="subject" rows="3" class="w-full bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none resize-none" placeholder="Deskripsikan visi Baginda..."></textarea>
                         </div>
+                        
+                        <!-- Detail Level Selector -->
+                        <div class="mt-2">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Tingkat Detail</label>
+                            <div class="flex gap-2">
+                                <label class="flex-1 cursor-pointer"><input type="radio" name="detail_level" value="short" class="peer sr-only"><span class="block text-center py-2 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 peer-checked:bg-indigo-600 peer-checked:border-indigo-600 peer-checked:text-white transition">Singkat</span></label>
+                                <label class="flex-1 cursor-pointer"><input type="radio" name="detail_level" value="medium" class="peer sr-only"><span class="block text-center py-2 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 peer-checked:bg-indigo-600 peer-checked:border-indigo-600 peer-checked:text-white transition">Sedang</span></label>
+                                <label class="flex-1 cursor-pointer"><input type="radio" name="detail_level" value="long" class="peer sr-only" checked><span class="block text-center py-2 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 peer-checked:bg-indigo-600 peer-checked:border-indigo-600 peer-checked:text-white transition">Ultra Detail</span></label>
+                            </div>
+                        </div>
+
+                        <!-- MOVED: Clothing & Pose to Core -->
+                        <div class="grid grid-cols-2 gap-3">
+                             <select id="outfit" class="custom-select w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-xs outline-none">
+                                 <option value="">Pakaian / Outfit</option>
+                                 <optgroup label="Modern">
+                                     <option value="Casual (T-shirt & Jeans)">Casual</option>
+                                     <option value="Streetwear (Hoodie & Sneakers)">Streetwear</option>
+                                     <option value="Formal Suit">Formal Suit</option>
+                                     <option value="Elegant Evening Gown">Evening Gown</option>
+                                     <option value="Business Casual">Business Casual</option>
+                                     <option value="Sportswear">Sportswear</option>
+                                 </optgroup>
+                                 <optgroup label="Fantasy/Sci-Fi">
+                                     <option value="Futuristic Armor">Cyber Armor</option>
+                                     <option value="Medieval Plate Armor">Medieval Armor</option>
+                                     <option value="Wizard Robe">Wizard Robe</option>
+                                     <option value="Steampunk Gear">Steampunk Gear</option>
+                                     <option value="Space Suit">Space Suit</option>
+                                 </optgroup>
+                                 <optgroup label="Traditional">
+                                     <option value="Kimono">Kimono</option>
+                                     <option value="Hanfu">Hanfu</option>
+                                     <option value="Batik Shirt">Batik</option>
+                                 </optgroup>
+                             </select>
+                             <select id="pose" class="custom-select w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-xs outline-none">
+                                 <option value="">Pose / Gaya</option>
+                                 <optgroup label="Fashion">
+                                    <option value="standing confidently">Standing</option>
+                                    <option value="walking dynamic">Walking</option>
+                                    <option value="sitting elegant">Sitting</option>
+                                    <option value="action pose">Action</option>
+                                    <option value="looking over shoulder">Looking Back</option>
+                                </optgroup>
+                                <optgroup label="Sport">
+                                    <option value="running fast">Running</option>
+                                    <option value="jumping mid-air">Jumping</option>
+                                    <option value="stretching body">Stretching</option>
+                                    <option value="lifting heavy weights">Lifting</option>
+                                </optgroup>
+                                <optgroup label="Lifestyle">
+                                    <option value="holding product">Holding Product</option>
+                                    <option value="drinking coffee">Drinking</option>
+                                    <option value="typing on laptop">Typing</option>
+                                    <option value="laughing naturally">Laughing</option>
+                                </optgroup>
+                             </select>
+                        </div>
+
                         <div class="grid grid-cols-3 gap-2">
-                            <select id="gender" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-[10px] outline-none" onchange="updateOutput()"><option value="">Gender</option><option value="male">Laki-laki</option><option value="female">Perempuan</option></select>
-                            <select id="age" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-[10px] outline-none" onchange="updateOutput()"><option value="">Usia</option><option value="adult">Dewasa</option><option value="teenager">Remaja</option></select>
-                            <select id="target-audience" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-[10px] outline-none" onchange="updateOutput()"><option value="">Target</option><option value="luxury">Luxury</option><option value="gen_z">Gen Z</option></select>
+                            <select id="gender" class="custom-select w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-[10px] outline-none"><option value="">Gender</option><option value="male">Laki-laki</option><option value="female">Perempuan</option></select>
+                            <select id="age" class="custom-select w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-[10px] outline-none"><option value="">Usia</option><option value="adult">Dewasa</option><option value="teenager">Remaja</option></select>
+                            <select id="target-audience" class="custom-select w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-[10px] outline-none"><option value="">Target</option><option value="luxury">Luxury</option><option value="gen_z">Gen Z</option></select>
                         </div>
                          <div class="space-y-3 pt-2 border-t border-slate-200 dark:border-slate-700">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase">Kategori</label>
-                            <select id="quality-preset" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none" onchange="applyQualityPreset()">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Kategori</label>
+                            <select id="quality-preset" class="custom-select w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none" onchange="applyQualityPreset()">
                                 <option value="">-- Manual --</option>
                                 <optgroup label="Skenario Khusus"><option value="street_editorial_vintage">Street Editorial (Vintage) ⭐</option><option value="poetic_cinema_alley">Poetic Asian Cinema ⭐</option></optgroup>
+                                <optgroup label="Wallpaper / Background"><option value="wallpaper_desktop">Desktop (16:9)</option><option value="wallpaper_mobile">Mobile (9:16)</option><option value="wallpaper_ultrawide">Ultrawide</option></optgroup>
                                 <optgroup label="Architecture"><option value="religious">Tempat Ibadah</option><option value="public_venue">Venue Publik</option><option value="historical">Situs Bersejarah</option><option value="commercial_arch">Komersial</option></optgroup>
                                 <optgroup label="Professional"><option value="portrait_pro">Portrait</option><option value="product">Product</option><option value="casual">Fashion</option><option value="sports">Sports</option><option value="food_porn">Food</option><option value="arch_modern">Modern Arch</option><option value="automotive">Automotive</option><option value="landscape_nature">Landscape</option><option value="street_photo">Street Photo</option><option value="macro_detail">Macro Detail</option><option value="dailylife">Daily Life</option></optgroup>
                                 <optgroup label="Digital Art"><option value="concept_art">Concept Art</option><option value="anime">Anime</option><option value="character_3d">3D Character</option><option value="fantasy_rpg">Fantasy RPG</option><option value="pixel_retro">Pixel Art</option><option value="vector_flat">Vector Flat</option><option value="sticker_cute">Sticker</option><option value="logo_minimal">Logo</option><option value="interior_design">Interior Design</option><option value="painting">Painting</option></optgroup>
                             </select>
                              <div id="sub-category-container" class="opacity-50 pointer-events-none transition-opacity">
-                                <select id="sub-category" class="w-full bg-indigo-50 dark:bg-slate-800 border border-indigo-200 dark:border-slate-700 rounded-lg p-2.5 text-indigo-700 dark:text-indigo-200 text-sm outline-none" onchange="updateOutput()"><option value="">-- Pilih Kategori Dulu --</option></select>
+                                <select id="sub-category" class="custom-select w-full bg-indigo-50 dark:bg-slate-800 border border-indigo-200 dark:border-slate-700 rounded-lg p-2.5 text-indigo-700 dark:text-indigo-200 text-sm outline-none"><option value="">-- Pilih Kategori Dulu --</option></select>
                             </div>
                         </div>
                     </div>
@@ -159,7 +216,7 @@
                     <!-- TAB: VISUAL -->
                     <div id="content-visual" class="hidden space-y-6 animate-fade-in">
                          <div class="grid grid-cols-2 gap-4">
-                            <select id="style" class="col-span-2 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none" onchange="updateOutput()">
+                            <select id="style" class="custom-select col-span-2 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none">
                                 <option value="">Gaya Artistik</option>
                                 <optgroup label="Modern & Sci-Fi">
                                     <option value="Cyberpunk">Cyberpunk</option>
@@ -196,7 +253,7 @@
                                 </optgroup>
                             </select>
                             
-                            <select id="lighting" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none" onchange="updateOutput()">
+                            <select id="lighting" class="custom-select w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none">
                                 <option value="">Pencahayaan</option>
                                 <optgroup label="Natural">
                                     <option value="Golden Hour">Golden Hour</option>
@@ -223,7 +280,7 @@
                                 </optgroup>
                             </select>
                             
-                            <select id="colors" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none" onchange="updateOutput()">
+                            <select id="colors" class="custom-select w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none">
                                 <option value="">Warna</option>
                                 <option value="Vivid Colors">Vivid</option>
                                 <option value="Pastel Colors">Pastel</option>
@@ -240,8 +297,7 @@
                                 <option value="Vintage Film">Vintage Film</option>
                                 <option value="High Contrast">High Contrast</option>
                             </select>
-                            
-                             <select id="background" class="col-span-2 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none" onchange="updateOutput()">
+                             <select id="background" class="custom-select col-span-2 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none">
                                  <option value="auto">⚡ Background Otomatis</option>
                                  <optgroup label="General">
                                     <option value="Studio">Studio</option>
@@ -274,24 +330,7 @@
                                     <option value="Green Screen">Green Screen</option>
                                  </optgroup>
                              </select>
-                             
-                             <select id="material" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none" onchange="updateOutput()">
-                                <option value="">Material</option>
-                                <option value="Glass">Glass</option>
-                                <option value="Metal">Metal</option>
-                                <option value="Wood">Wood</option>
-                                <option value="Stone">Stone</option>
-                                <option value="Liquid">Liquid</option>
-                                <option value="Smoke">Smoke</option>
-                                <option value="Fire">Fire</option>
-                                <option value="Ice">Ice</option>
-                                <option value="Fabric">Fabric</option>
-                                <option value="Plastic">Plastic</option>
-                                <option value="Origami">Origami</option>
-                                <option value="Marble">Marble</option>
-                                <option value="Gold">Gold</option>
-                                <option value="Crystal">Crystal</option>
-                            </select>
+                             <select id="material" class="hidden"><option value=""></option></select> <!-- Hidden but kept for logic -->
                         </div>
                         <div><label class="block text-xs font-bold uppercase mb-2">Mood</label><div class="flex flex-wrap gap-2" id="mood-chips"></div></div>
                     </div>
@@ -299,31 +338,10 @@
                     <!-- TAB: TECH -->
                     <div id="content-tech" class="hidden space-y-6 animate-fade-in">
                         <div class="grid grid-cols-2 gap-4">
-                             <select id="view-preset" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none" onchange="updateOutput()">
-                                 <option value="">Camera Angle</option>
-                                 <option value="High Angle">High Angle</option>
-                                 <option value="Low Angle">Low Angle</option>
-                                 <option value="Wide Angle">Wide Angle</option>
-                                 <option value="Close Up">Close Up</option>
-                                 <option value="Isometric">Isometric</option>
-                                 <option value="Aerial View">Aerial View</option>
-                                 <option value="Worm's Eye">Worm's Eye</option>
-                                 <option value="Eye Level">Eye Level</option>
-                                 <option value="Top Down">Top Down</option>
-                                 <option value="Dutch Angle">Dutch Angle</option>
-                                 <option value="Over Shoulder">Over Shoulder</option>
-                                 <option value="Macro">Macro</option>
-                                 <option value="Fish Eye">Fish Eye</option>
-                                 <option value="Drone View">Drone</option>
-                                 <option value="Satellite View">Satellite</option>
-                                 <option value="GoPro View">GoPro</option>
-                                 <option value="CCTV View">CCTV</option>
-                                 <option value="Selfie">Selfie</option>
-                                 <option value="Telescopic">Telescopic</option>
-                                 <option value="Wide Shot">Wide Shot</option>
-                                 <option value="Medium Shot">Medium Shot</option>
+                             <select id="view-preset" class="custom-select w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none">
+                                 <option value="">Angle</option><option value="High Angle">High Angle</option><option value="Low Angle">Low Angle</option><option value="Wide Angle">Wide Angle</option><option value="Close Up">Close Up</option><option value="Isometric">Isometric</option><option value="Aerial View">Aerial View</option><option value="Worm's Eye">Worm's Eye</option><option value="Eye Level">Eye Level</option><option value="Top Down">Top Down</option><option value="Dutch Angle">Dutch Angle</option><option value="Over Shoulder">Over Shoulder</option>
                              </select>
-                             <select id="lens" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none" onchange="updateOutput()">
+                             <select id="lens" class="custom-select w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none">
                                  <option value="">Lens / Focus</option>
                                  <option value="Shallow Depth of Field">Bokeh (Blur BG)</option>
                                  <option value="Deep Focus">Deep Focus (Sharp All)</option>
@@ -334,62 +352,20 @@
                                  <option value="Wide Angle Lens">Wide Angle Lens</option>
                                  <option value="Macro Lens">Macro Lens</option>
                              </select>
-                             <select id="pose" class="col-span-2 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none" onchange="updateOutput()">
-                                 <option value="">Pose (Bebas)</option>
-                                 <optgroup label="Fashion">
-                                    <option value="standing confidently">Standing</option>
-                                    <option value="walking dynamic">Walking</option>
-                                    <option value="sitting elegant">Sitting</option>
-                                    <option value="action pose">Action</option>
-                                    <option value="looking over shoulder">Looking Back</option>
-                                    <option value="leaning against wall">Leaning</option>
-                                    <option value="hand in hair">Hand in Hair</option>
-                                    <option value="crossed arms">Crossed Arms</option>
-                                </optgroup>
-                                <optgroup label="Portrait">
-                                    <option value="headshot">Headshot</option>
-                                    <option value="half body">Half Body</option>
-                                    <option value="full body">Full Body</option>
-                                </optgroup>
-                                <optgroup label="Sport & Action">
-                                    <option value="running fast">Running</option>
-                                    <option value="jumping mid-air">Jumping</option>
-                                    <option value="stretching body">Stretching</option>
-                                    <option value="lifting heavy weights">Lifting</option>
-                                    <option value="kicking dynamic">Kicking</option>
-                                    <option value="punching">Punching</option>
-                                    <option value="diving">Diving</option>
-                                    <option value="cycling">Cycling</option>
-                                    <option value="flying">Flying/Floating</option>
-                                    <option value="swimming">Swimming</option>
-                                </optgroup>
-                                <optgroup label="Emotion">
-                                    <option value="laughing naturally">Laughing</option>
-                                    <option value="crying emotional">Crying</option>
-                                    <option value="screaming angry">Screaming</option>
-                                    <option value="thoughtful expression">Thinking</option>
-                                    <option value="smiling warm">Smiling</option>
-                                </optgroup>
-                                <optgroup label="Lifestyle">
-                                    <option value="holding product">Holding Product</option>
-                                    <option value="drinking coffee">Drinking</option>
-                                    <option value="typing on laptop">Typing</option>
-                                </optgroup>
-                             </select>
                         </div>
                         <div>
                              <label class="block text-xs font-bold uppercase mb-2">Rasio</label>
                              <div class="grid grid-cols-4 gap-2">
-                                <label class="cursor-pointer"><input type="radio" name="ar" value="1:1" class="peer sr-only" checked onchange="updateOutput()"><div class="border border-slate-200 dark:border-slate-700 rounded p-1 text-center text-[10px] peer-checked:bg-indigo-600 peer-checked:text-white">1:1</div></label>
-                                <label class="cursor-pointer"><input type="radio" name="ar" value="16:9" class="peer sr-only" onchange="updateOutput()"><div class="border border-slate-200 dark:border-slate-700 rounded p-1 text-center text-[10px] peer-checked:bg-indigo-600 peer-checked:text-white">16:9</div></label>
-                                <label class="cursor-pointer"><input type="radio" name="ar" value="9:16" class="peer sr-only" onchange="updateOutput()"><div class="border border-slate-200 dark:border-slate-700 rounded p-1 text-center text-[10px] peer-checked:bg-indigo-600 peer-checked:text-white">9:16</div></label>
-                                <label class="cursor-pointer"><input type="radio" name="ar" value="4:5" class="peer sr-only" onchange="updateOutput()"><div class="border border-slate-200 dark:border-slate-700 rounded p-1 text-center text-[10px] peer-checked:bg-indigo-600 peer-checked:text-white">4:5</div></label>
+                                <label class="cursor-pointer"><input type="radio" name="ar" value="1:1" class="peer sr-only" checked><div class="border border-slate-200 dark:border-slate-700 rounded p-1 text-center text-[10px] peer-checked:bg-indigo-600 peer-checked:text-white">1:1</div></label>
+                                <label class="cursor-pointer"><input type="radio" name="ar" value="16:9" class="peer sr-only"><div class="border border-slate-200 dark:border-slate-700 rounded p-1 text-center text-[10px] peer-checked:bg-indigo-600 peer-checked:text-white">16:9</div></label>
+                                <label class="cursor-pointer"><input type="radio" name="ar" value="9:16" class="peer sr-only"><div class="border border-slate-200 dark:border-slate-700 rounded p-1 text-center text-[10px] peer-checked:bg-indigo-600 peer-checked:text-white">9:16</div></label>
+                                <label class="cursor-pointer"><input type="radio" name="ar" value="4:5" class="peer sr-only"><div class="border border-slate-200 dark:border-slate-700 rounded p-1 text-center text-[10px] peer-checked:bg-indigo-600 peer-checked:text-white">4:5</div></label>
                              </div>
                         </div>
                          <!-- Sliders -->
                         <div class="space-y-4">
-                            <div><div class="flex justify-between mb-1"><label class="text-[10px] font-bold">STYLIZE</label><span id="stylize-val" class="text-[10px]">100</span></div><input type="range" id="stylize" min="0" max="1000" value="100" class="w-full" oninput="document.getElementById('stylize-val').textContent = this.value; updateOutput()"></div>
-                            <div><div class="flex justify-between mb-1"><label class="text-[10px] font-bold">CHAOS</label><span id="chaos-val" class="text-[10px]">0</span></div><input type="range" id="chaos" min="0" max="100" value="0" class="w-full" oninput="document.getElementById('chaos-val').textContent = this.value; updateOutput()"></div>
+                            <div><div class="flex justify-between mb-1"><label class="text-[10px] font-bold">STYLIZE</label><span id="stylize-val" class="text-[10px]">100</span></div><input type="range" id="stylize" min="0" max="1000" value="100" class="w-full" oninput="document.getElementById('stylize-val').textContent = this.value"></div>
+                            <div><div class="flex justify-between mb-1"><label class="text-[10px] font-bold">CHAOS</label><span id="chaos-val" class="text-[10px]">0</span></div><input type="range" id="chaos" min="0" max="100" value="0" class="w-full" oninput="document.getElementById('chaos-val').textContent = this.value"></div>
                             <div>
                                 <div class="flex justify-between mb-1"><label class="text-[10px] font-bold">SEED</label></div>
                                 <div class="flex gap-2"><input type="number" id="seed" placeholder="Random" class="flex-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded p-1 text-xs"><button onclick="document.getElementById('seed').value = Math.floor(Math.random()*999999); updateOutput()" class="bg-slate-200 dark:bg-slate-700 px-3 rounded text-xs"><i class="fa-solid fa-dice"></i></button></div>
@@ -447,6 +423,12 @@
             </div>
         </div>
     </main>
+
+     <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-slate-800 dark:bg-slate-800 border border-slate-700 dark:border-indigo-500/50 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 translate-y-20 opacity-0 transition-all duration-300 z-[60]">
+        <i class="fa-solid fa-check-circle text-green-400"></i>
+        <span id="toast-msg" class="text-sm font-medium">Action Successful</span>
+    </div>
 
     <!-- FIREBASE SDK -->
     <script type="module">
@@ -541,14 +523,34 @@
         const subCategories = {
             'street_editorial_vintage': [{ val: 'default', label: 'Default', prompt: '' }],
             'poetic_cinema_alley': [{ val: 'default', label: 'Default', prompt: '' }],
-            'religious': [{ val: 'mosque', label: 'Mesjid', prompt: ', grand mosque architecture, islamic geometric patterns, minarets, dome' }, { val: 'church', label: 'Gereja', prompt: ', gothic cathedral, stained glass windows, spires' }],
-            'public_venue': [{ val: 'stadium', label: 'Stadion', prompt: ', huge sports stadium, floodlights, crowd in distance' }, { val: 'museum', label: 'Museum', prompt: ', contemporary art museum, clean lines' }],
-            'historical': [{ val: 'castle', label: 'Kastil', prompt: ', medieval castle, stone walls, moat' }, { val: 'ruins', label: 'Reruntuhan', prompt: ', ancient ruins, broken pillars, overgrown vines' }],
-            'commercial_arch': [{ val: 'mall', label: 'Mall', prompt: ', modern shopping mall interior, atrium, escalators' }, { val: 'hotel', label: 'Hotel', prompt: ', luxury beach resort, swimming pool' }],
-            'sports': [{ val: 'soccer', label: 'Sepak Bola', prompt: ', playing soccer, dynamic kicking pose, stadium lights background' }, { val: 'basketball', label: 'Basket', prompt: ', playing basketball, slam dunk action, sweat details' }],
-            'food_porn': [{ val: 'dessert', label: 'Dessert', prompt: ', delicious dessert, sweet, creamy texture, macro shot' }, { val: 'main_course', label: 'Main Course', prompt: ', gourmet main course, steaming hot, rich texture' }],
-            'product': [{ val: 'apparel', label: 'Pakaian', prompt: ', clothing product photography, ghost mannequin effect' }, { val: 'bag_fashion', label: 'Tas & Aksesoris', prompt: ', fashion accessory product shot, bag worn by model' }, { val: 'tech', label: 'Gadget', prompt: ', sleek smartphone product shot, clean studio lighting' }],
-            'casual': [{ val: 'streetwear', label: 'Streetwear', prompt: ', streetwear fashion, hoodie' }, { val: 'vintage', label: 'Vintage', prompt: ', vintage 90s fashion' }],
+            'wallpaper_desktop': [
+                { val: 'nature_scape', label: 'Nature Landscape', prompt: ', majestic landscape wallpaper, mountains, lake reflection, 8k resolution, highly detailed, desktop background' },
+                { val: 'cyber_city', label: 'Cyberpunk City', prompt: ', futuristic city skyline, neon lights, skyscrapers, night time, desktop wallpaper 4k, sci-fi atmosphere' },
+                { val: 'gaming_room', label: 'Gaming Setup', prompt: ', futuristic gaming room setup, rgb lighting, multiple screens, cozy atmosphere, isometric view, 8k render' },
+                { val: 'space_nebula', label: 'Deep Space', prompt: ', deep space nebula, vibrant colors, stars, galaxy, cosmic dust, cinematic wallpaper 8k' },
+                { val: 'abstract_fluid', label: 'Abstract Fluid', prompt: ', abstract fluid art, swirling colorful liquids, acrylic pour style, vibrant, 4k background' },
+                { val: 'minimalist_desk', label: 'Minimalist', prompt: ', minimalist desktop wallpaper, clean lines, simple shapes, pastel colors, calming' }
+            ],
+            'wallpaper_mobile': [
+                { val: 'aesthetic_clouds', label: 'Aesthetic Clouds', prompt: ', dreamy pastel clouds, sunset sky, phone wallpaper, vertical composition, ethereal' },
+                { val: 'neon_street', label: 'Neon Street', prompt: ', vertical city street at night, neon signs, rain reflection, cyberpunk vibe, phone background' },
+                { val: 'dark_oled', label: 'Dark OLED', prompt: ', true black background, minimal white lines, geometric shape, oled friendly, high contrast' },
+                { val: 'flower_macro', label: 'Floral Macro', prompt: ', macro flower photography, dew drops, vibrant petals, vertical wallpaper, sharp focus' },
+                { val: 'anime_portrait', label: 'Anime Portrait', prompt: ', vertical anime character portrait, high quality art, detailed background, mobile wallpaper' }
+            ],
+            'wallpaper_ultrawide': [
+                { val: 'panoramic_view', label: 'Panoramic View', prompt: ', panoramic landscape view, horizon line, wide angle, epic scale, 21:9 wallpaper' },
+                { val: 'coding_setup', label: 'Coding/Hacker', prompt: ', matrix code rain, cyber security theme, dark green and black, digital texture, ultrawide background' },
+                { val: 'fantasy_world', label: 'Fantasy World', prompt: ', sprawling fantasy kingdom, castle in distance, dragon flying, epic wide shot, highly detailed' }
+            ],
+            'religious': [{ val: 'mosque', label: 'Mesjid', prompt: ', grand mosque architecture, islamic geometric patterns, minarets, dome, golden hour light, spiritual atmosphere' }, { val: 'church', label: 'Gereja', prompt: ', gothic cathedral, stained glass windows, spires, stone texture, dramatic lighting, holy atmosphere' }],
+            'public_venue': [{ val: 'stadium', label: 'Stadion', prompt: ', huge sports stadium, floodlights, crowd in distance, green field, modern architecture, aerial view' }, { val: 'museum', label: 'Museum', prompt: ', contemporary art museum, clean lines, white walls, glass facade, architectural masterpiece' }],
+            'historical': [{ val: 'castle', label: 'Kastil', prompt: ', medieval castle, stone walls, moat, towers, hilltop location, epic fantasy landscape' }, { val: 'ruins', label: 'Reruntuhan', prompt: ', ancient ruins, broken pillars, overgrown vines, archaeological site, mysterious history' }],
+            'commercial_arch': [{ val: 'mall', label: 'Mall', prompt: ', modern shopping mall interior, atrium, escalators, glass roof, busy shoppers, bright lighting' }, { val: 'hotel', label: 'Hotel', prompt: ', luxury beach resort, swimming pool, palm trees, sunset view, relaxing holiday vibe' }],
+            'sports': [{ val: 'soccer', label: 'Sepak Bola', prompt: ', playing soccer, dynamic kicking pose, stadium lights background, detailed jersey, grass particles' }, { val: 'basketball', label: 'Basket', prompt: ', playing basketball, slam dunk action, sweat details, basketball court background, dynamic motion' }],
+            'food_porn': [{ val: 'dessert', label: 'Dessert', prompt: ', delicious dessert, sweet, creamy texture, garnishing, macro shot, food magazine style' }, { val: 'main_course', label: 'Main Course', prompt: ', gourmet main course, steaming hot, rich texture, restaurant plating, juicy details' }],
+            'product': [{ val: 'apparel', label: 'Pakaian', prompt: ', clothing product photography, ghost mannequin effect, high quality fabric texture, studio lighting, clean background, fashion catalog style' }, { val: 'bag_fashion', label: 'Tas & Aksesoris', prompt: ', fashion accessory product shot, bag worn by model, dynamic pose, professional photoshoot, detailed texture, focus on product, commercial lifestyle' }, { val: 'tech', label: 'Gadget', prompt: ', sleek smartphone product shot, clean studio lighting, reflection, high tech vibe' }],
+            'casual': [{ val: 'streetwear', label: 'Streetwear', prompt: ', streetwear fashion, hoodie, sneakers, urban city background, hypebeast style' }, { val: 'vintage', label: 'Vintage', prompt: ', vintage 90s fashion, retro aesthetic, film grain, old camera style' }],
             'concept_art': [{ val: 'character_design', label: 'Karakter', prompt: ', character design sheet' }, { val: 'environment', label: 'Environment', prompt: ', wide environment concept art' }],
             'portrait_pro': [{ val: 'business', label: 'Bisnis', prompt: ', professional headshot' }, { val: 'fashion_editorial', label: 'Fashion', prompt: ', high fashion editorial' }],
             'landscape_nature': [{ val: 'mountain', label: 'Gunung', prompt: ', majestic snowy mountains' }, { val: 'beach', label: 'Pantai', prompt: ', tropical beach, turquoise water' }],
@@ -573,7 +575,7 @@
         let radarChart;
 
         // --- FUNCTIONS ---
-        function renderMoods() {
+        window.renderMoods = function() {
             const container = document.getElementById('mood-chips');
             if(!container) return;
             container.innerHTML = '';
@@ -589,7 +591,7 @@
             });
         }
 
-        function getAutoBackground(style, subject) {
+        window.getAutoBackground = function(style, subject) {
             if((style && style.includes('Cyberpunk')) || (subject && subject.includes('neon'))) return "futuristic city";
             if(subject.toLowerCase().includes('mosque')) return "blue sky, courtyard";
             return "detailed background";
@@ -611,7 +613,8 @@
             const gender = document.getElementById('gender')?.value || "";
             const age = document.getElementById('age')?.value || "";
             const targetAudience = document.getElementById('target-audience')?.value || "";
-            
+            const detailLevel = document.querySelector('input[name="detail_level"]:checked')?.value || 'medium';
+
             const model = document.querySelector('input[name="model"]:checked')?.value || 'generic';
             const ar = document.querySelector('input[name="ar"]:checked')?.value || '1:1';
             const mainCat = document.getElementById('quality-preset')?.value || "";
@@ -624,6 +627,9 @@
             const stylize = document.getElementById('stylize')?.value || "100";
             const chaos = document.getElementById('chaos')?.value || "0";
             const seed = document.getElementById('seed')?.value || "";
+            
+            // New Outfit
+            const outfit = document.getElementById('outfit')?.value || "";
 
             let promptSegments = [];
             
@@ -644,8 +650,10 @@
                 if (sub) processedSubject += sub.prompt;
             }
 
-            if (poseVal && !['street_editorial_vintage', 'poetic_cinema_alley'].includes(mainCat)) {
-                processedSubject += `, ${poseVal}`;
+            // Append Pose & Outfit (if not Masterpiece)
+            if (!['street_editorial_vintage', 'poetic_cinema_alley'].includes(mainCat)) {
+                 if (poseVal) processedSubject += `, ${poseVal}`;
+                 if (outfit) processedSubject += `, wearing ${outfit}`;
             }
 
             if (processedSubject) promptSegments.push(processedSubject);
@@ -670,7 +678,15 @@
                 if (targetAudience === 'corporate') promptSegments.push("professional, clean");
             }
 
-            promptSegments.push("masterpiece, 8k, best quality");
+            // Detail Level Logic
+            if (detailLevel === 'long') {
+                promptSegments.push("hyper-detailed, intricate details, highly textured, sharp focus, ray tracing, global illumination, unreal engine 5 render, octane render, vivid colors, atmospheric lighting, depth of field");
+                if (style) promptSegments.push(`${style} masterpiece, trending on artstation, award winning`);
+            } else if (detailLevel === 'medium') {
+                promptSegments.push("masterpiece, 8k, best quality");
+            } else {
+                 promptSegments.push("high quality");
+            }
 
             let finalPrompt = promptSegments.join(", ");
             let params = "";
@@ -680,6 +696,15 @@
                 if (seed) params += ` --seed ${seed}`;
                 if (negative) params += ` --no ${negative}`;
                 finalPrompt += `<span class="text-indigo-500 font-bold">${params}</span>`;
+            } else if (model === 'gemini') {
+                // Gemini Logic
+                let arText = "";
+                if(ar === '16:9') arText = " in wide 16:9 aspect ratio";
+                else if(ar === '9:16') arText = " in vertical 9:16 aspect ratio";
+                else if(ar === '4:5') arText = " in portrait 4:5 aspect ratio";
+                
+                finalPrompt += arText;
+                if (negative) finalPrompt += `. Ensure the image does not contain: ${negative}`;
             } else {
                 if (negative) finalPrompt += `\nNegative: ${negative}`;
             }
@@ -690,7 +715,7 @@
 
             // Charts
             if(radarChart && document.getElementById('content-analytics') && !document.getElementById('content-analytics').classList.contains('hidden')) {
-                 radarChart.data.datasets[0].data = [prompt.length/10, 5, 5, 5, 5];
+                 radarChart.data.datasets[0].data = [promptSegments.length, 5, 5, 5, 5];
                  radarChart.update();
             }
         };
@@ -783,6 +808,17 @@
              const sub = document.getElementById('sub-category');
              const subCont = document.getElementById('sub-category-container');
              
+             // Auto set AR for wallpapers
+             const arRadios = document.getElementsByName('ar');
+             if (val === 'wallpaper_desktop') {
+                 document.querySelector('input[name="ar"][value="16:9"]').checked = true;
+             } else if (val === 'wallpaper_mobile') {
+                 document.querySelector('input[name="ar"][value="9:16"]').checked = true;
+             } else if (val === 'wallpaper_ultrawide') {
+                 // Fallback 16:9 if 21:9 visual hidden
+                 document.querySelector('input[name="ar"][value="16:9"]').checked = true;
+             }
+
              sub.innerHTML = '<option value="">-- Pilih --</option>';
              if(subCategories[val]) {
                  subCont.classList.remove('opacity-50', 'pointer-events-none');
@@ -869,6 +905,7 @@
                 subCategoryContainer: document.getElementById('sub-category-container'),
                 view: document.getElementById('view-preset'),
                 pose: document.getElementById('pose'),
+                outfit: document.getElementById('outfit'),
                 lens: document.getElementById('lens'),
                 stylize: document.getElementById('stylize'),
                 chaos: document.getElementById('chaos'),
@@ -882,7 +919,7 @@
             };
 
             // Init Moods
-            renderMoods();
+            window.renderMoods();
             
             // Init History
             window.updateHistoryFilters();

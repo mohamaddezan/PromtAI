@@ -1,952 +1,763 @@
 <!DOCTYPE html>
-<html lang="id" class="dark">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Imperial Ultimate Prompt Generator</title>
+    <title>Pro AI Prompt Generator - By Baginda Raja</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        brand: { 50: '#eef2ff', 100: '#e0e7ff', 500: '#6366f1', 600: '#4f46e5', 900: '#312e81' },
-                        slate: { 850: '#151e2e' }
-                    },
-                    fontFamily: {
-                        sans: ['Outfit', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
+                        primary: '#8b5cf6', 
+                        primaryHover: '#7c3aed',
+                        dark: '#111827',
+                        card: '#1f2937',
+                        secondary: '#10b981', 
+                        accent: '#f59e0b', 
+                        landmark: '#3b82f6', 
+                        people: '#ec4899', 
+                        sports: '#ef4444', 
+                        logo: '#f97316', 
+                        texture: '#8b5cf6', 
+                        interior: '#06b6d4', 
+                        fantasy: '#d946ef',
+                        fnb: '#84cc16', 
+                        library: '#fbbf24', 
                     }
                 }
             }
         }
     </script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
-        
-        :root { --primary: #6366f1; }
-        
-        /* Optimized Background */
-        body { 
-            font-family: 'Outfit', sans-serif; 
-            transition: background-color 0.3s ease;
-            background-color: #f8fafc; 
-            color: #1e293b; 
-        }
-        
-        .dark body { 
-            background-color: #020617; 
-            color: #e2e8f0; 
-        }
-
-        /* Reduced Complexity Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-        .dark ::-webkit-scrollbar-thumb { background: #334155; }
-
-        .gradient-text { background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        /* Optimized Glass Panel - Reduced Blur */
-        .glass-panel { 
-            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); 
-            background: rgba(255, 255, 255, 0.85); 
-            border: 1px solid rgba(226, 232, 240, 0.8);
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1); 
-        }
-        .dark .glass-panel { 
-            background: rgba(30, 41, 59, 0.7); 
-            border: 1px solid rgba(99, 102, 241, 0.1); 
-            box-shadow: none; 
-        }
-
-        .tab-btn { transition: color 0.2s, background-color 0.2s; position: relative; }
-        .tab-btn.active { color: #4f46e5; background: rgba(99, 102, 241, 0.1); }
-        .dark .tab-btn.active { color: #fff; }
-        .tab-btn.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px; background: #6366f1; }
-
-        .chart-container { position: relative; width: 100%; height: 250px; }
-        @media (min-width: 768px) { .chart-container { height: 300px; } }
-
-        /* Animation - Hardware Accelerated */
-        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; will-change: opacity, transform; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-        .custom-select {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236366f1' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 0.5rem center;
-            background-repeat: no-repeat;
-            background-size: 1.25em 1.25em;
-        }
+        textarea::-webkit-scrollbar, div::-webkit-scrollbar { width: 6px; }
+        textarea::-webkit-scrollbar-track, div::-webkit-scrollbar-track { background: #374151; }
+        textarea::-webkit-scrollbar-thumb, div::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+        .tab-btn { transition: all 0.2s ease; border-left: 3px solid transparent; opacity: 0.7; }
+        .tab-btn:hover { background: rgba(255,255,255,0.05); opacity: 0.9; }
+        .tab-active { opacity: 1; border-left-color: currentColor; background: rgba(255,255,255,0.08); font-weight: 600; padding-left: 1rem !important; }
+        select { cursor: pointer; background-color: #1f2937; color: white; padding: 10px; }
+        .other-input { transition: all 0.3s ease; }
+        .library-card { transition: transform 0.2s, box-shadow 0.2s; }
+        .library-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); }
     </style>
 </head>
-<body class="min-h-screen flex flex-col selection:bg-indigo-500/30 pb-10 lg:pb-0">
+<body class="bg-dark text-gray-100 min-h-screen font-sans flex items-center justify-center p-2 md:p-6">
 
-    <!-- Navbar -->
-    <nav class="border-b border-indigo-500/10 bg-white/90 dark:bg-slate-900/90 sticky top-0 z-50 backdrop-blur-sm">
-        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-md"><i class="fa-solid fa-crown text-sm"></i></div>
-                <h1 class="text-xl font-bold tracking-tight text-slate-800 dark:text-slate-100">Imperial<span class="gradient-text ml-1">Studio</span></h1>
-            </div>
-            <div class="flex items-center gap-3">
-                <div id="sync-status" class="text-[10px] flex items-center gap-1 text-slate-400 font-mono"><i class="fa-solid fa-circle text-gray-500"></i> Offline</div>
-                <button onclick="toggleTheme()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-indigo-100 dark:hover:bg-slate-700 transition"><i id="theme-icon" class="fa-solid fa-sun"></i></button>
-                <div class="h-4 w-px bg-slate-300 dark:bg-slate-700 mx-1"></div>
-                <button onclick="fullReset()" class="text-xs text-red-500 hover:text-red-600 transition"><i class="fa-solid fa-trash-can"></i></button>
-            </div>
-        </div>
-    </nav>
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2"></div>
 
-    <!-- Main Content -->
-    <main class="flex-grow container mx-auto px-3 sm:px-4 py-4 sm:py-6 max-w-[1600px]">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 lg:h-[calc(100vh-90px)] h-auto">
-            
-            <!-- Left Controls -->
-            <div class="lg:col-span-2 flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0">
-                <button onclick="switchTab('core')" id="tab-core" class="tab-btn active p-3 rounded-xl text-sm font-semibold text-left bg-indigo-50 dark:bg-slate-800/50 text-indigo-600 dark:text-indigo-300 min-w-[120px]"><i class="fa-solid fa-layer-group mr-2"></i>Generator</button>
-                <button onclick="switchTab('visual')" id="tab-visual" class="tab-btn p-3 rounded-xl text-sm font-semibold text-left text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 min-w-[120px]"><i class="fa-solid fa-palette mr-2"></i>Visual</button>
-                <button onclick="switchTab('tech')" id="tab-tech" class="tab-btn p-3 rounded-xl text-sm font-semibold text-left text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 min-w-[120px]"><i class="fa-solid fa-microchip mr-2"></i>Teknis</button>
-                <button onclick="switchTab('analytics')" id="tab-analytics" class="tab-btn p-3 rounded-xl text-sm font-semibold text-left text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 min-w-[120px]"><i class="fa-solid fa-chart-pie mr-2"></i>Analytics</button>
-                <button onclick="switchTab('guide')" id="tab-guide" class="tab-btn p-3 rounded-xl text-sm font-semibold text-left text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 min-w-[120px]"><i class="fa-solid fa-book-open mr-2"></i>Guide</button>
-            </div>
-
-            <!-- Middle Controls Area -->
-            <div class="lg:col-span-5 flex flex-col gap-4 lg:h-full lg:overflow-hidden h-auto">
-                <div class="glass-panel p-4 sm:p-5 rounded-2xl lg:overflow-y-auto lg:flex-grow space-y-5 shadow-sm" id="controls-area">
-                    
-                    <!-- TAB: CORE -->
-                    <div id="content-core" class="space-y-5 animate-fade-in">
-                         <div class="flex gap-2 w-full bg-slate-50 dark:bg-slate-800/40 p-1 rounded-xl border border-slate-200 dark:border-slate-700 overflow-x-auto">
-                            <label class="flex-1 cursor-pointer min-w-[80px]"><input type="radio" name="model" value="generic" class="peer sr-only" checked><span class="block text-center py-1.5 rounded-md text-[10px] font-bold text-slate-500 dark:text-slate-400 peer-checked:bg-indigo-600 peer-checked:text-white transition whitespace-nowrap">Stable Diff</span></label>
-                            <label class="flex-1 cursor-pointer min-w-[80px]"><input type="radio" name="model" value="midjourney" class="peer sr-only"><span class="block text-center py-1.5 rounded-md text-[10px] font-bold text-slate-500 dark:text-slate-400 peer-checked:bg-indigo-600 peer-checked:text-white transition whitespace-nowrap">Midjourney</span></label>
-                            <label class="flex-1 cursor-pointer min-w-[80px]"><input type="radio" name="model" value="dalle" class="peer sr-only"><span class="block text-center py-1.5 rounded-md text-[10px] font-bold text-slate-500 dark:text-slate-400 peer-checked:bg-indigo-600 peer-checked:text-white transition whitespace-nowrap">DALL-E 3</span></label>
-                            <label class="flex-1 cursor-pointer min-w-[80px]"><input type="radio" name="model" value="gemini" class="peer sr-only"><span class="block text-center py-1.5 rounded-md text-[10px] font-bold text-slate-500 dark:text-slate-400 peer-checked:bg-indigo-600 peer-checked:text-white transition whitespace-nowrap">Gemini Pro</span></label>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Subjek Utama</label>
-                            <textarea id="subject" rows="3" class="w-full bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none resize-none" placeholder="Deskripsikan visi Baginda..."></textarea>
-                        </div>
-                        
-                        <!-- Detail Level Selector -->
-                        <div class="mt-2">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Tingkat Detail</label>
-                            <div class="flex gap-2">
-                                <label class="flex-1 cursor-pointer"><input type="radio" name="detail_level" value="short" class="peer sr-only"><span class="block text-center py-2 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 peer-checked:bg-indigo-600 peer-checked:border-indigo-600 peer-checked:text-white transition">Singkat</span></label>
-                                <label class="flex-1 cursor-pointer"><input type="radio" name="detail_level" value="medium" class="peer sr-only"><span class="block text-center py-2 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 peer-checked:bg-indigo-600 peer-checked:border-indigo-600 peer-checked:text-white transition">Sedang</span></label>
-                                <label class="flex-1 cursor-pointer"><input type="radio" name="detail_level" value="long" class="peer sr-only" checked><span class="block text-center py-2 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 peer-checked:bg-indigo-600 peer-checked:border-indigo-600 peer-checked:text-white transition">Ultra Detail</span></label>
-                            </div>
-                        </div>
-
-                        <!-- MOVED: Clothing & Pose to Core -->
-                        <div class="grid grid-cols-2 gap-3">
-                             <select id="outfit" class="custom-select w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-xs outline-none">
-                                 <option value="">Pakaian / Outfit</option>
-                                 <optgroup label="Modern">
-                                     <option value="Casual (T-shirt & Jeans)">Casual</option>
-                                     <option value="Streetwear (Hoodie & Sneakers)">Streetwear</option>
-                                     <option value="Formal Suit">Formal Suit</option>
-                                     <option value="Elegant Evening Gown">Evening Gown</option>
-                                     <option value="Business Casual">Business Casual</option>
-                                     <option value="Sportswear">Sportswear</option>
-                                 </optgroup>
-                                 <optgroup label="Fantasy/Sci-Fi">
-                                     <option value="Futuristic Armor">Cyber Armor</option>
-                                     <option value="Medieval Plate Armor">Medieval Armor</option>
-                                     <option value="Wizard Robe">Wizard Robe</option>
-                                     <option value="Steampunk Gear">Steampunk Gear</option>
-                                     <option value="Space Suit">Space Suit</option>
-                                 </optgroup>
-                                 <optgroup label="Traditional">
-                                     <option value="Kimono">Kimono</option>
-                                     <option value="Hanfu">Hanfu</option>
-                                     <option value="Batik Shirt">Batik</option>
-                                 </optgroup>
-                             </select>
-                             <select id="pose" class="custom-select w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-xs outline-none">
-                                 <option value="">Pose / Gaya</option>
-                                 <optgroup label="Fashion">
-                                    <option value="standing confidently">Standing</option>
-                                    <option value="walking dynamic">Walking</option>
-                                    <option value="sitting elegant">Sitting</option>
-                                    <option value="action pose">Action</option>
-                                    <option value="looking over shoulder">Looking Back</option>
-                                </optgroup>
-                                <optgroup label="Sport">
-                                    <option value="running fast">Running</option>
-                                    <option value="jumping mid-air">Jumping</option>
-                                    <option value="stretching body">Stretching</option>
-                                    <option value="lifting heavy weights">Lifting</option>
-                                </optgroup>
-                                <optgroup label="Lifestyle">
-                                    <option value="holding product">Holding Product</option>
-                                    <option value="drinking coffee">Drinking</option>
-                                    <option value="typing on laptop">Typing</option>
-                                    <option value="laughing naturally">Laughing</option>
-                                </optgroup>
-                             </select>
-                        </div>
-
-                        <div class="grid grid-cols-3 gap-2">
-                            <select id="gender" class="custom-select w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-[10px] outline-none"><option value="">Gender</option><option value="male">Laki-laki</option><option value="female">Perempuan</option></select>
-                            <select id="age" class="custom-select w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-[10px] outline-none"><option value="">Usia</option><option value="adult">Dewasa</option><option value="teenager">Remaja</option></select>
-                            <select id="target-audience" class="custom-select w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-[10px] outline-none"><option value="">Target</option><option value="luxury">Luxury</option><option value="gen_z">Gen Z</option></select>
-                        </div>
-                         <div class="space-y-3 pt-2 border-t border-slate-200 dark:border-slate-700">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Kategori</label>
-                            <select id="quality-preset" class="custom-select w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none" onchange="applyQualityPreset()">
-                                <option value="">-- Manual --</option>
-                                <optgroup label="Skenario Khusus"><option value="street_editorial_vintage">Street Editorial (Vintage) ⭐</option><option value="poetic_cinema_alley">Poetic Asian Cinema ⭐</option></optgroup>
-                                <optgroup label="Wallpaper / Background"><option value="wallpaper_desktop">Desktop (16:9)</option><option value="wallpaper_mobile">Mobile (9:16)</option><option value="wallpaper_ultrawide">Ultrawide</option></optgroup>
-                                <optgroup label="Architecture"><option value="religious">Tempat Ibadah</option><option value="public_venue">Venue Publik</option><option value="historical">Situs Bersejarah</option><option value="commercial_arch">Komersial</option></optgroup>
-                                <optgroup label="Professional"><option value="portrait_pro">Portrait</option><option value="product">Product</option><option value="casual">Fashion</option><option value="sports">Sports</option><option value="food_porn">Food</option><option value="arch_modern">Modern Arch</option><option value="automotive">Automotive</option><option value="landscape_nature">Landscape</option><option value="street_photo">Street Photo</option><option value="macro_detail">Macro Detail</option><option value="dailylife">Daily Life</option></optgroup>
-                                <optgroup label="Digital Art"><option value="concept_art">Concept Art</option><option value="anime">Anime</option><option value="character_3d">3D Character</option><option value="fantasy_rpg">Fantasy RPG</option><option value="pixel_retro">Pixel Art</option><option value="vector_flat">Vector Flat</option><option value="sticker_cute">Sticker</option><option value="logo_minimal">Logo</option><option value="interior_design">Interior Design</option><option value="painting">Painting</option></optgroup>
-                            </select>
-                             <div id="sub-category-container" class="opacity-50 pointer-events-none transition-opacity">
-                                <select id="sub-category" class="custom-select w-full bg-indigo-50 dark:bg-slate-800 border border-indigo-200 dark:border-slate-700 rounded-lg p-2.5 text-indigo-700 dark:text-indigo-200 text-sm outline-none"><option value="">-- Pilih Kategori Dulu --</option></select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- TAB: VISUAL -->
-                    <div id="content-visual" class="hidden space-y-6 animate-fade-in">
-                         <div class="grid grid-cols-2 gap-4">
-                            <select id="style" class="custom-select col-span-2 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none">
-                                <option value="">Gaya Artistik</option>
-                                <optgroup label="Modern & Sci-Fi">
-                                    <option value="Cyberpunk">Cyberpunk</option>
-                                    <option value="Sci-Fi">Sci-Fi</option>
-                                    <option value="Steampunk">Steampunk</option>
-                                    <option value="Vaporwave">Vaporwave</option>
-                                    <option value="Glitch Art">Glitch Art</option>
-                                </optgroup>
-                                <optgroup label="Cinematic & Atmospheric">
-                                    <option value="Cinematic">Cinematic</option>
-                                    <option value="Noir">Noir</option>
-                                    <option value="Fantasy">Fantasy</option>
-                                    <option value="Horror">Horror</option>
-                                </optgroup>
-                                <optgroup label="Artistic Styles">
-                                    <option value="Minimalist">Minimalist</option>
-                                    <option value="Abstract">Abstract</option>
-                                    <option value="Art Nouveau">Art Nouveau</option>
-                                    <option value="Impressionism">Impressionism</option>
-                                    <option value="Surrealism">Surrealism</option>
-                                    <option value="Pop Art">Pop Art</option>
-                                    <option value="Ukiyo-e">Ukiyo-e</option>
-                                    <option value="Baroque">Baroque</option>
-                                    <option value="Gothic">Gothic</option>
-                                    <option value="Ink Wash">Ink Wash</option>
-                                </optgroup>
-                                <optgroup label="Digital & 3D">
-                                    <option value="3D Render">3D Render</option>
-                                    <option value="Low Poly">Low Poly</option>
-                                    <option value="Pixel Art">Pixel Art</option>
-                                    <option value="Vector Art">Vector Art</option>
-                                    <option value="Kawaii">Kawaii</option>
-                                    <option value="Retro 80s">Retro 80s</option>
-                                </optgroup>
-                            </select>
-                            
-                            <select id="lighting" class="custom-select w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none">
-                                <option value="">Pencahayaan</option>
-                                <optgroup label="Natural">
-                                    <option value="Golden Hour">Golden Hour</option>
-                                    <option value="Natural Light">Natural Light</option>
-                                    <option value="God Rays">God Rays</option>
-                                    <option value="Underwater">Underwater</option>
-                                </optgroup>
-                                <optgroup label="Artificial & Studio">
-                                    <option value="Cinematic Lighting">Cinematic</option>
-                                    <option value="Softbox">Softbox</option>
-                                    <option value="Studio Lighting">Studio</option>
-                                    <option value="Rim Lighting">Rim Lighting</option>
-                                    <option value="Butterfly Lighting">Butterfly Lighting</option>
-                                    <option value="Hard Light">Hard Light</option>
-                                    <option value="Diffused Light">Diffused Light</option>
-                                </optgroup>
-                                <optgroup label="Atmospheric">
-                                    <option value="Volumetric Lighting">Volumetric</option>
-                                    <option value="Rembrandt Lighting">Rembrandt</option>
-                                    <option value="Neon Lights">Neon</option>
-                                    <option value="Bioluminescence">Bioluminescence</option>
-                                    <option value="Candlelight">Candlelight</option>
-                                    <option value="Moody">Moody</option>
-                                </optgroup>
-                            </select>
-                            
-                            <select id="colors" class="custom-select w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none">
-                                <option value="">Warna</option>
-                                <option value="Vivid Colors">Vivid</option>
-                                <option value="Pastel Colors">Pastel</option>
-                                <option value="Monochrome">Monochrome</option>
-                                <option value="Sepia">Sepia</option>
-                                <option value="Warm Tones">Warm</option>
-                                <option value="Cool Tones">Cool</option>
-                                <option value="Neon Palette">Neon</option>
-                                <option value="Earth Tones">Earth Tones</option>
-                                <option value="Teal & Orange">Teal & Orange</option>
-                                <option value="Black & Gold">Black & Gold</option>
-                                <option value="Muted">Muted</option>
-                                <option value="Psychedelic">Psychedelic</option>
-                                <option value="Vintage Film">Vintage Film</option>
-                                <option value="High Contrast">High Contrast</option>
-                            </select>
-                             <select id="background" class="custom-select col-span-2 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none">
-                                 <option value="auto">⚡ Background Otomatis</option>
-                                 <optgroup label="General">
-                                    <option value="Studio">Studio</option>
-                                    <option value="Outdoor Nature">Outdoor</option>
-                                    <option value="Urban City">Urban</option>
-                                    <option value="Indoor Room">Indoor</option>
-                                 </optgroup>
-                                 <optgroup label="Specific Places">
-                                    <option value="Forest">Forest</option>
-                                    <option value="Beach">Beach</option>
-                                    <option value="Desert">Desert</option>
-                                    <option value="Mountain">Mountain</option>
-                                    <option value="Cyber City">Cyber City</option>
-                                    <option value="Medieval Village">Medieval Village</option>
-                                    <option value="Library">Library</option>
-                                    <option value="Cafe">Cafe</option>
-                                    <option value="Street">Street</option>
-                                    <option value="Ruin">Ruin</option>
-                                    <option value="Castle">Castle</option>
-                                    <option value="Laboratory">Laboratory</option>
-                                    <option value="Space">Space</option>
-                                    <option value="Stadium">Stadium</option>
-                                    <option value="Stage">Stage</option>
-                                 </optgroup>
-                                 <optgroup label="Abstract & Solid">
-                                    <option value="Abstract Gradient">Abstract</option>
-                                    <option value="Fantasy World">Fantasy</option>
-                                    <option value="White Screen">White Screen</option>
-                                    <option value="Black Screen">Black Screen</option>
-                                    <option value="Green Screen">Green Screen</option>
-                                 </optgroup>
-                             </select>
-                             <select id="material" class="hidden"><option value=""></option></select> <!-- Hidden but kept for logic -->
-                        </div>
-                        <div><label class="block text-xs font-bold uppercase mb-2">Mood</label><div class="flex flex-wrap gap-2" id="mood-chips"></div></div>
-                    </div>
-
-                    <!-- TAB: TECH -->
-                    <div id="content-tech" class="hidden space-y-6 animate-fade-in">
-                        <div class="grid grid-cols-2 gap-4">
-                             <select id="view-preset" class="custom-select w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none">
-                                 <option value="">Angle</option><option value="High Angle">High Angle</option><option value="Low Angle">Low Angle</option><option value="Wide Angle">Wide Angle</option><option value="Close Up">Close Up</option><option value="Isometric">Isometric</option><option value="Aerial View">Aerial View</option><option value="Worm's Eye">Worm's Eye</option><option value="Eye Level">Eye Level</option><option value="Top Down">Top Down</option><option value="Dutch Angle">Dutch Angle</option><option value="Over Shoulder">Over Shoulder</option>
-                             </select>
-                             <select id="lens" class="custom-select w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-sm outline-none">
-                                 <option value="">Lens / Focus</option>
-                                 <option value="Shallow Depth of Field">Bokeh (Blur BG)</option>
-                                 <option value="Deep Focus">Deep Focus (Sharp All)</option>
-                                 <option value="35mm Lens">35mm (Standard)</option>
-                                 <option value="50mm Lens">50mm (Portrait)</option>
-                                 <option value="85mm Lens">85mm (Portrait Pro)</option>
-                                 <option value="Telephoto Lens">Telephoto (Zoom)</option>
-                                 <option value="Wide Angle Lens">Wide Angle Lens</option>
-                                 <option value="Macro Lens">Macro Lens</option>
-                             </select>
-                        </div>
-                        <div>
-                             <label class="block text-xs font-bold uppercase mb-2">Rasio</label>
-                             <div class="grid grid-cols-4 gap-2">
-                                <label class="cursor-pointer"><input type="radio" name="ar" value="1:1" class="peer sr-only" checked><div class="border border-slate-200 dark:border-slate-700 rounded p-1 text-center text-[10px] peer-checked:bg-indigo-600 peer-checked:text-white">1:1</div></label>
-                                <label class="cursor-pointer"><input type="radio" name="ar" value="16:9" class="peer sr-only"><div class="border border-slate-200 dark:border-slate-700 rounded p-1 text-center text-[10px] peer-checked:bg-indigo-600 peer-checked:text-white">16:9</div></label>
-                                <label class="cursor-pointer"><input type="radio" name="ar" value="9:16" class="peer sr-only"><div class="border border-slate-200 dark:border-slate-700 rounded p-1 text-center text-[10px] peer-checked:bg-indigo-600 peer-checked:text-white">9:16</div></label>
-                                <label class="cursor-pointer"><input type="radio" name="ar" value="4:5" class="peer sr-only"><div class="border border-slate-200 dark:border-slate-700 rounded p-1 text-center text-[10px] peer-checked:bg-indigo-600 peer-checked:text-white">4:5</div></label>
-                             </div>
-                        </div>
-                         <!-- Sliders -->
-                        <div class="space-y-4">
-                            <div><div class="flex justify-between mb-1"><label class="text-[10px] font-bold">STYLIZE</label><span id="stylize-val" class="text-[10px]">100</span></div><input type="range" id="stylize" min="0" max="1000" value="100" class="w-full" oninput="document.getElementById('stylize-val').textContent = this.value"></div>
-                            <div><div class="flex justify-between mb-1"><label class="text-[10px] font-bold">CHAOS</label><span id="chaos-val" class="text-[10px]">0</span></div><input type="range" id="chaos" min="0" max="100" value="0" class="w-full" oninput="document.getElementById('chaos-val').textContent = this.value"></div>
-                            <div>
-                                <div class="flex justify-between mb-1"><label class="text-[10px] font-bold">SEED</label></div>
-                                <div class="flex gap-2"><input type="number" id="seed" placeholder="Random" class="flex-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded p-1 text-xs"><button onclick="document.getElementById('seed').value = Math.floor(Math.random()*999999); updateOutput()" class="bg-slate-200 dark:bg-slate-700 px-3 rounded text-xs"><i class="fa-solid fa-dice"></i></button></div>
-                            </div>
-                        </div>
-                    </div>
-                     <textarea id="negative" class="hidden"></textarea> <!-- Hidden but present to prevent errors -->
-
-                    <!-- TAB: ANALYTICS -->
-                    <div id="content-analytics" class="hidden space-y-6 animate-fade-in">
-                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="glass-panel p-4 rounded-xl h-64"><div class="chart-container"><canvas id="radarChart"></canvas></div></div>
-                            <div class="glass-panel p-4 rounded-xl h-64"><div class="chart-container"><canvas id="barChart"></canvas></div></div>
-                        </div>
-                    </div>
-
-                     <!-- TAB: GUIDE -->
-                    <div id="content-guide" class="hidden space-y-6 animate-fade-in">
-                        <div class="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
-                             <h3 class="font-bold mb-2">Publikasi (Hosting)</h3>
-                             <p class="text-sm mb-4">Untuk menyimpan riwayat secara online, Baginda perlu mengkonfigurasi Firebase. Jika hanya menggunakan index.html ini secara lokal, riwayat tersimpan di browser.</p>
-                             <pre class="bg-black text-green-400 p-3 rounded text-xs overflow-x-auto">
-// Konfigurasi Firebase (Isi dengan milik Baginda saat deploy)
-// const firebaseConfig = { ... };
-                             </pre>
-                        </div>
-                    </div>
+    <div class="bg-card w-full max-w-7xl rounded-xl shadow-2xl overflow-hidden border border-gray-700 flex flex-col md:flex-row h-[95vh] md:h-[90vh]">
+        
+        <!-- SIDEBAR -->
+        <div class="w-full md:w-64 bg-gray-900/50 border-r border-gray-700 flex flex-col flex-shrink-0">
+            <div class="p-4 border-b border-gray-700 bg-primary/10 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+                <h1 class="text-base font-bold text-white tracking-wide drop-shadow-md flex items-center gap-2">
+                    <i class="fas fa-crown text-yellow-500 text-xs"></i> <span>Pro Generator</span>
+                </h1>
+                <p class="text-gray-400 text-[10px] mt-1 uppercase tracking-wider">Edisi Baginda Raja</p>
+                <div id="db-status" class="text-[9px] mt-1 text-gray-500 flex items-center gap-1">
+                    <span class="w-2 h-2 rounded-full bg-gray-500 animate-pulse"></span> Connecting Cloud...
                 </div>
             </div>
 
-            <!-- Right Output -->
-            <div class="lg:col-span-5 flex flex-col lg:h-full h-auto gap-4 mt-8 lg:mt-0">
-                <div class="glass-panel rounded-2xl p-1 flex-grow flex flex-col border-indigo-500/20 shadow-xl relative overflow-hidden min-h-[300px]">
-                    <div class="bg-white/80 dark:bg-slate-900/80 p-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center backdrop-blur-md">
-                        <span class="font-bold text-sm">Prompt Output</span>
-                        <span id="token-count" class="text-[10px] bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">0 chars</span>
-                    </div>
-                    <div class="bg-slate-50 dark:bg-slate-900 p-6 flex-grow overflow-y-auto relative custom-scrollbar transition-colors">
-                        <div id="output-text" class="font-mono text-sm leading-relaxed whitespace-pre-wrap selection:bg-indigo-200 dark:selection:bg-indigo-500/30">...</div>
-                    </div>
-                    <div class="p-4 bg-white/80 dark:bg-slate-800/80 border-t flex gap-3">
-                        <button onclick="copyToClipboard()" class="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-3 rounded-lg shadow-lg active:scale-95">Salin</button>
-                        <button onclick="saveToHistory()" class="px-4 bg-slate-200 dark:bg-slate-700 rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition"><i class="fa-regular fa-bookmark"></i></button>
-                    </div>
-                </div>
+            <div class="flex-1 overflow-y-auto p-2 space-y-0.5">
+                <button onclick="switchMode('library')" id="tab-library" class="tab-btn w-full text-left px-3 py-3 rounded-r-lg text-library mb-4 border-l-library bg-yellow-500/10 hover:bg-yellow-500/20 flex items-center gap-3 text-sm font-bold shadow-sm">
+                    <i class="fas fa-book-open w-5 text-center"></i> <span>Perpustakaan</span>
+                </button>
+                <div class="text-[10px] uppercase text-gray-500 font-bold px-3 pt-2 pb-1">Kategori Generator</div>
+                <button onclick="switchMode('general')" id="tab-general" class="tab-btn w-full text-left px-3 py-2 rounded-r-lg text-primary tab-active flex items-center gap-3 text-xs"><i class="fas fa-magic w-4 text-center"></i> <span>Umum</span></button>
+                <button onclick="switchMode('product')" id="tab-product" class="tab-btn w-full text-left px-3 py-2 rounded-r-lg text-secondary flex items-center gap-3 text-xs"><i class="fas fa-camera w-4 text-center"></i> <span>Produk & Iklan</span></button>
                 
-                 <div class="glass-panel rounded-xl p-4 h-[250px] flex flex-col shadow-lg">
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-xs font-bold uppercase">Riwayat</span>
-                        <select id="history-filter" class="bg-transparent text-[10px] outline-none" onchange="loadHistory()"><option value="all">Semua</option></select>
-                        <button onclick="clearHistory()" class="text-[10px] text-red-500">Clear</button>
+                <div class="text-[10px] uppercase text-gray-500 font-bold px-3 pt-3 pb-1">Fotografi</div>
+                <button onclick="switchMode('people')" id="tab-people" class="tab-btn w-full text-left px-3 py-2 rounded-r-lg text-people flex items-center gap-3 text-xs"><i class="fas fa-user-friends w-4 text-center"></i> <span>People & Model</span></button>
+                <button onclick="switchMode('fnb')" id="tab-fnb" class="tab-btn w-full text-left px-3 py-2 rounded-r-lg text-fnb flex items-center gap-3 text-xs"><i class="fas fa-utensils w-4 text-center"></i> <span>FnB (Kuliner)</span></button>
+                <button onclick="switchMode('sports')" id="tab-sports" class="tab-btn w-full text-left px-3 py-2 rounded-r-lg text-sports flex items-center gap-3 text-xs"><i class="fas fa-futbol w-4 text-center"></i> <span>Sports</span></button>
+                <button onclick="switchMode('landscape')" id="tab-landscape" class="tab-btn w-full text-left px-3 py-2 rounded-r-lg text-accent flex items-center gap-3 text-xs"><i class="fas fa-mountain w-4 text-center"></i> <span>Landscape</span></button>
+                <button onclick="switchMode('landmark')" id="tab-landmark" class="tab-btn w-full text-left px-3 py-2 rounded-r-lg text-landmark flex items-center gap-3 text-xs"><i class="fas fa-city w-4 text-center"></i> <span>Landmark</span></button>
+
+                <div class="text-[10px] uppercase text-gray-500 font-bold px-3 pt-3 pb-1">Bisnis & Desain</div>
+                <button onclick="switchMode('logo')" id="tab-logo" class="tab-btn w-full text-left px-3 py-2 rounded-r-lg text-logo flex items-center gap-3 text-xs"><i class="fas fa-shield-alt w-4 text-center"></i> <span>Logo & Emblem</span></button>
+                <button onclick="switchMode('texture')" id="tab-texture" class="tab-btn w-full text-left px-3 py-2 rounded-r-lg text-texture flex items-center gap-3 text-xs"><i class="fas fa-layer-group w-4 text-center"></i> <span>Motif Jersey</span></button>
+                <button onclick="switchMode('interior')" id="tab-interior" class="tab-btn w-full text-left px-3 py-2 rounded-r-lg text-interior flex items-center gap-3 text-xs"><i class="fas fa-couch w-4 text-center"></i> <span>Interior</span></button>
+                <button onclick="switchMode('fantasy')" id="tab-fantasy" class="tab-btn w-full text-left px-3 py-2 rounded-r-lg text-fantasy flex items-center gap-3 text-xs"><i class="fas fa-dragon w-4 text-center"></i> <span>Fantasy & RPG</span></button>
+            </div>
+             <div class="p-2 border-t border-gray-700 text-[10px] text-gray-500 text-center">v20.1 • Manual Inputs Added</div>
+        </div>
+
+        <!-- MAIN CONTENT AREA -->
+        <div class="flex-1 overflow-y-auto bg-card relative flex flex-col">
+            <div class="p-5 md:p-8 flex-1">
+                
+                <!-- === LIBRARY VIEW === -->
+                <div id="view-library" class="hidden h-full flex flex-col">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                        <div>
+                            <h2 class="text-2xl font-bold text-white flex items-center gap-3"><span class="bg-yellow-500/20 text-yellow-400 p-2 rounded-lg"><i class="fas fa-cloud"></i></span> Perpustakaan Cloud</h2>
+                            <p class="text-gray-400 text-sm mt-1 ml-1">Mantra tersimpan aman di awan Firebase.</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="exportLibrary()" class="bg-blue-600/30 hover:bg-blue-600/50 text-blue-300 px-4 py-2 rounded-lg text-xs transition border border-blue-600/50 flex items-center gap-2 font-bold"><i class="fas fa-file-export"></i> Ekspor Data</button>
+                        </div>
                     </div>
-                    <div id="history-list" class="flex-grow overflow-y-auto space-y-2 pr-1 custom-scrollbar"></div>
+                    <div class="mb-4 bg-gray-800/50 p-2 rounded-lg border border-gray-700 flex flex-wrap gap-2 items-center">
+                        <span class="text-xs text-gray-400 font-bold px-2 uppercase"><i class="fas fa-filter mr-1"></i> Filter:</span>
+                        <select id="lib-filter" onchange="window.renderLibrary()" class="bg-gray-700 text-white text-xs px-3 py-1.5 rounded border border-gray-600 outline-none hover:bg-gray-600 cursor-pointer">
+                            <option value="all">Semua Kategori</option>
+                            <option value="general">Umum</option>
+                            <option value="product">Produk</option>
+                            <option value="fnb">FnB (Kuliner)</option>
+                            <option value="people">People</option>
+                            <option value="sports">Sports</option>
+                            <option value="landscape">Landscape</option>
+                            <option value="landmark">Landmark</option>
+                            <option value="logo">Logo</option>
+                            <option value="texture">Texture</option>
+                            <option value="interior">Interior</option>
+                            <option value="fantasy">Fantasy</option>
+                        </select>
+                        <span id="lib-count" class="text-xs text-gray-500 ml-auto px-2">Memuat data...</span>
+                    </div>
+                    <div id="library-list" class="grid grid-cols-1 gap-4 overflow-y-auto custom-scrollbar pb-20"></div>
+                    <div id="library-empty" class="hidden flex flex-col items-center justify-center h-full text-gray-600 mt-10">
+                        <i class="fas fa-cloud-upload-alt text-6xl mb-4 opacity-30"></i>
+                        <p class="text-lg font-medium">Database Cloud Kosong.</p>
+                        <p class="text-sm">Silakan racik mantra baru dan simpan.</p>
+                    </div>
+                </div>
+
+                <!-- === GENERATOR FORMS === -->
+                <div id="generator-container">
+                    
+                    <!-- 1. FORM UMUM -->
+                    <div id="form-general" class="space-y-6 block form-content">
+                        <div class="bg-primary/5 p-4 rounded-lg border border-primary/20 text-sm text-primary mb-4 flex items-start gap-3"><i class="fas fa-palette mt-1"></i> <div><strong>Mode Umum (Creative Sandbox)</strong><br>Arena bermain konsep, emosi, dan imajinasi liar Baginda.</div></div>
+                        <div class="space-y-2"><label class="text-sm text-gray-300">Subjek Utama</label><input type="text" id="subject-gen" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500" placeholder="Contoh: A cute astronaut cat..."></div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Mood & Atmosfer</label>
+                                <select id="gen-mood" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                                    <option value="">(None)</option>
+                                    <optgroup label="Positive & Dreamy"><option value="Ethereal">Ethereal / Mimpi</option><option value="Whimsical">Whimsical (Jenaka)</option><option value="Serene">Serene (Tenang)</option><option value="Romantic">Romantic</option><option value="Majestic">Majestic (Megah)</option><option value="Uplifting">Uplifting</option></optgroup>
+                                    <optgroup label="Negative/Dark"><option value="Dark, gritty">Dark & Gritty</option><option value="Melancholic">Melancholic (Sendu)</option><option value="Horror, eerie">Horror</option><option value="Mysterious">Mysterious</option><option value="Chaotic">Chaotic</option><option value="Ominous">Ominous</option></optgroup>
+                                    <optgroup label="Abstract & Surreal"><option value="Psychedelic">Psychedelic</option><option value="Surreal">Surreal</option><option value="Abstract">Abstract</option><option value="Dreamcore">Dreamcore</option></optgroup>
+                                    <option value="other" class="text-yellow-400 font-bold">Other ✏️</option>
+                                </select><input type="text" id="gen-mood-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white">
+                            </div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Komposisi</label>
+                                <select id="gen-comp" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                                    <option value="">(Default)</option>
+                                    <optgroup label="Standard"><option value="Symmetrical composition">Symmetrical</option><option value="Rule of thirds">Rule of Thirds</option><option value="Centered">Centered</option><option value="Golden Ratio">Golden Ratio</option></optgroup>
+                                    <optgroup label="Creative"><option value="Double exposure">Double Exposure</option><option value="Knolling">Knolling (Rapi)</option><option value="Isometric view">Isometric</option><option value="Silhouette">Silhouette</option><option value="Collage art">Collage</option><option value="Miniature effect">Tilt-shift</option><option value="Negative space">Negative Space</option><option value="Forced perspective">Forced Perspective</option></optgroup>
+                                    <option value="other" class="text-yellow-400 font-bold">Other ✏️</option>
+                                </select><input type="text" id="gen-comp-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white">
+                            </div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Gaya Seni</label>
+                                <select id="style-gen" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                                    <option value="">(None)</option>
+                                    <optgroup label="Spesifik & Unik"><option value="Art Nouveau style">Art Nouveau</option><option value="Bauhaus style">Bauhaus</option><option value="Synthwave">Synthwave</option><option value="Paper quilling art">Paper Quilling</option><option value="Stippling art">Stippling</option><option value="Thick impasto oil">Impasto</option><option value="Ukiyo-e">Ukiyo-e</option><option value="Stained Glass">Stained Glass</option></optgroup>
+                                    <optgroup label="Digital & 3D"><option value="Photorealistic, 8k">Photorealistic</option><option value="Cinematic movie scene">Cinematic</option><option value="Cyberpunk 2077 concept">Cyberpunk</option><option value="3D render, Unreal Engine 5">3D Render</option><option value="Anime style, Studio Ghibli">Anime</option><option value="Pixel Art">Pixel Art</option><option value="Low Poly">Low Poly</option><option value="Voxel Art">Voxel Art</option><option value="Claymation">Claymation</option></optgroup>
+                                    <optgroup label="Traditional"><option value="Oil painting">Oil Painting</option><option value="Watercolor painting">Watercolor</option><option value="Pencil sketch">Pencil Sketch</option><option value="Charcoal Drawing">Charcoal</option><option value="Pop art">Pop Art</option><option value="Graffiti art">Graffiti</option><option value="Ink wash">Ink Wash</option></optgroup>
+                                    <option value="other" class="text-yellow-400 font-bold">Other ✏️</option>
+                                </select><input type="text" id="style-gen-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white">
+                            </div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Pencahayaan</label>
+                                <select id="lighting-gen" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="">(None)</option><optgroup label="Natural"><option value="Natural sunlight">Natural Sunlight</option><option value="Golden hour">Golden Hour</option><option value="Blue hour">Blue Hour</option><option value="Overcast">Overcast</option><option value="Moonlight">Moonlight</option></optgroup><optgroup label="Artificial"><option value="Cinematic lighting">Cinematic</option><option value="Neon lights">Neon</option><option value="Rim lighting">Rim Light</option><option value="Volumetric lighting">God Rays</option><option value="Bioluminescence">Bioluminescence</option><option value="Studio softbox">Softbox</option><option value="Candlelight">Candlelight</option><option value="Ring light">Ring Light</option></optgroup><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="lighting-gen-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. FORM PRODUK -->
+                    <div id="form-product" class="space-y-6 hidden form-content">
+                        <div class="bg-secondary/5 p-4 rounded-lg border border-secondary/20 text-sm text-secondary mb-4 flex items-start gap-3"><i class="fas fa-camera mt-1"></i> <div><strong>Mode Produk</strong><br>Optimasi katalog, iklan, dan display jersey Hudan Sportwear.</div></div>
+                        <div class="space-y-2"><label class="text-sm text-gray-300">Nama Produk</label><input type="text" id="product-name" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white" placeholder="Contoh: Red Jersey Hudan..."></div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Display</label><select id="prod-display" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="">(Default)</option><option value="Ghost mannequin effect">Ghost Mannequin (Hantu)</option><option value="Flat lay photography">Flat Lay (Datar)</option><option value="Hanging on a clothing rack">Hanging (Gantung)</option><option value="Worn by a fitness model">On Model (Fitness)</option><option value="Worn by a professional model">On Model (Pro)</option><option value="Floating in mid-air">Levitation (Melayang)</option><option value="Folded neatly">Folded (Lipat)</option><option value="Podium display">On Podium (Podium)</option><option value="Knolling photography">Knolling (Rapi)</option><option value="Hand held">Hand Held (Dipegang)</option><option value="Exploded view">Exploded View</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="prod-display-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Shot</label><select id="product-shot" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="Hero shot">Hero Shot</option><option value="Close-up detail shot">Close-up</option><option value="Macro shot">Macro</option><option value="Wide angle lifestyle">Lifestyle</option><option value="Low angle shot">Low Angle</option><option value="Top-down view">Top-down</option><option value="3/4 angle shot">3/4 Angle</option><option value="Side profile shot">Side Profile</option><option value="Splash photography">Splash</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="product-shot-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Lighting</label><select id="prod-light" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="">(Auto)</option><option value="Softbox lighting">Softbox</option><option value="Hard light">Hard Light</option><option value="Rim lighting">Rim Light</option><option value="Gobo lighting">Gobo</option><option value="Ring light">Ring Light</option><option value="Natural window light">Natural Window</option><option value="God rays">God Rays</option><option value="Double colored lighting">Dual Tone Neon</option><option value="Backlight">Backlight</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="prod-light-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Vibe</label><select id="product-vibe" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="Clean studio">Clean Studio</option><option value="Luxury">Luxury</option><option value="Sporty">Sporty</option><option value="Industrial">Industrial</option><option value="Fresh">Fresh/Organic</option><option value="Futuristic">Futuristic</option><option value="Minimalist">Minimalist</option><option value="Pastel colors">Pastel</option><option value="Moody dark">Moody</option><option value="Medical sterile">Medical</option><option value="Rustic vintage">Rustic</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="product-vibe-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Tekstur</label><select id="prod-texture" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                                <option value="">(Default)</option>
+                                <optgroup label="Fabrics"><option value="Performance mesh fabric">Jersey Mesh</option><option value="Cotton fabric">Cotton</option><option value="Velvet fabric">Velvet</option><option value="Luxury leather">Leather</option><option value="Silk fabric">Silk</option><option value="Denim texture">Denim</option><option value="Knitted wool">Wool</option></optgroup>
+                                <optgroup label="Hard"><option value="Matte finish">Matte</option><option value="Glossy finish">Glossy</option><option value="Brushed metal">Brushed Metal</option><option value="Translucent glass">Glass</option><option value="Carbon fiber">Carbon Fiber</option><option value="Wood grain">Wood</option><option value="Concrete">Concrete</option><option value="Chrome">Chrome</option></optgroup>
+                                <option value="other" class="text-yellow-400 font-bold">Other ✏️</option>
+                            </select><input type="text" id="prod-texture-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Props</label><select id="prod-props" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="">(None)</option><option value="Gym equipment">Gym Equipment</option><option value="Water splashes">Water Splash</option><option value="Smoke">Smoke/Fog</option><option value="Tropical monstera leaves">Tropical Leaves</option><option value="Geometric shapes">Geometric Shapes</option><option value="Luxury silk fabric">Silk Drape</option><option value="Rock stones">Rocks</option><option value="Tech gadgets">Tech Vibes</option><option value="Dried flowers">Dried Flowers</option><option value="Mirror reflection">Mirror</option><option value="Ice cubes">Ice Cubes</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="prod-props-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                        </div>
+                        <div class="space-y-2"><label class="text-sm text-gray-300">Background</label><input type="text" id="product-bg" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white" placeholder="Contoh: on a wooden table..."></div>
+                    </div>
+
+                    <!-- 3. FORM PEOPLE -->
+                    <div id="form-people" class="space-y-6 hidden form-content">
+                        <div class="bg-people/5 p-4 rounded-lg border border-people/20 text-sm text-people mb-4 flex items-start gap-3"><i class="fas fa-user mt-1"></i> <div><strong>Mode People & Model</strong></div></div>
+                        <div class="space-y-2"><label class="text-sm text-gray-300">Deskripsi Orang</label><input type="text" id="people-subject" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white" placeholder="Contoh: A stylish woman in red dress..."></div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Demografi</label>
+                                <select id="people-demo" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                                    <option value="">(Default)</option>
+                                    <optgroup label="Modern & Realistic">
+                                        <option value="International Supermodel">Supermodel</option><option value="Fashion Model">Fashion Model</option><option value="Fitness Model">Fitness Model</option><option value="Instagram Influencer">Influencer</option><option value="Indonesian woman">Indonesian Woman</option><option value="Indonesian man">Indonesian Man</option><option value="Elderly person">Orang Tua</option><option value="Korean K-pop idol">K-Pop Idol</option><option value="Japanese samurai features">Japanese</option><option value="Middle eastern">Middle Eastern</option><option value="African american">African American</option><option value="Caucasian">Caucasian</option><option value="Teenager">Teenager</option><option value="Child">Child</option>
+                                    </optgroup>
+                                    <optgroup label="Royal & Historical (Cosplay)">
+                                        <option value="Joseon Dynasty King">Joseon King</option><option value="Joseon Dynasty Queen">Joseon Queen</option><option value="Ancient Egyptian Pharaoh">Pharaoh</option><option value="Arabian Prince">Arabian Prince</option><option value="Arabian Princess">Arabian Princess</option><option value="Medieval European King">Medieval King</option><option value="Javanese Sultan">Sultan Jawa</option><option value="Greek God">Greek God</option><option value="Viking Jarl">Viking</option>
+                                    </optgroup>
+                                    <option value="other" class="text-yellow-400 font-bold">Other ✏️</option>
+                                </select><input type="text" id="people-demo-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white">
+                            </div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Pencahayaan Wajah</label>
+                                <select id="people-light" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                                    <option value="">(Auto)</option>
+                                    <option value="Rembrandt lighting">Rembrandt</option><option value="Butterfly lighting">Butterfly</option><option value="Split lighting">Split Lighting</option><option value="Soft window light">Soft Window</option><option value="Neon rim light">Neon Rim</option><option value="Ring light">Ring Light</option><option value="Golden hour sun">Golden Hour</option><option value="Silhouette">Silhouette</option><option value="Studio flash">Studio Flash</option>
+                                    <option value="other" class="text-yellow-400 font-bold">Other ✏️</option>
+                                </select>
+                                <input type="text" id="people-light-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white">
+                            </div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Fashion/Outfit</label>
+                                <select id="people-fashion" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                                    <option value="">(Default)</option>
+                                    <optgroup label="Modern & Casual"><option value="Casual streetwear">Streetwear</option><option value="Oversized fashion">Oversized</option><option value="Denim on denim">Denim</option><option value="Summer beach outfit">Summer/Beach</option><option value="Bohemian style">Bohemian</option></optgroup>
+                                    <optgroup label="Formal & Professional"><option value="Formal business suit">Formal Suit</option><option value="Evening gown">Evening Gown</option><option value="Tuxedo">Tuxedo</option><option value="Smart casual">Smart Casual</option></optgroup>
+                                    <optgroup label="Historical"><option value="Royal Joseon Hanbok">Joseon Hanbok</option><option value="Ancient Egyptian Royal Regalia">Firaun Outfit</option><option value="Arabian Royal Bisht">Arabian Bisht</option><option value="Medieval King Robe">King Robe</option><option value="Indonesian Batik Keraton">Batik Keraton</option><option value="Samurai Armor">Samurai Armor</option></optgroup>
+                                    <optgroup label="Special"><option value="Traditional cultural attire">Adat</option><option value="Sportswear">Sportswear</option><option value="Tactical gear">Tactical</option><option value="Cyberpunk fashion">Cyberpunk</option><option value="Steampunk costume">Steampunk</option><option value="High fashion">High Fashion</option><option value="Cosplay costume">Cosplay</option><option value="Medical scrubs">Medical</option></optgroup>
+                                    <option value="other" class="text-yellow-400 font-bold">Other ✏️</option>
+                                </select>
+                                <input type="text" id="people-fashion-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white">
+                            </div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Detail Kulit</label>
+                                <select id="people-skin" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                                    <option value="">(Default)</option>
+                                    <option value="Hyper-realistic skin texture">Pori-pori Asli</option><option value="Smooth skin">Mulus</option><option value="Sweaty skin">Berkeringat</option><option value="Freckles">Freckles</option><option value="Weathered skin">Keriput</option><option value="Pale skin">Pucat</option><option value="Tanned skin">Tan</option><option value="Oily skin">Berminyak</option><option value="Scarred skin">Luka/Parut</option><option value="Painted face">Face Paint</option><option value="Cybernetic skin">Cyborg Skin</option>
+                                    <option value="other" class="text-yellow-400 font-bold">Other ✏️</option>
+                                </select>
+                                <input type="text" id="people-skin-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white">
+                            </div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Framing</label>
+                                <select id="people-frame" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                                    <option value="Full body shot">Full Body</option><option value="Knee-up shot">Knee-up</option><option value="Cowboy shot">Cowboy</option><option value="Waist-up shot">Waist-up</option><option value="Portrait shot">Portrait</option><option value="Close-up">Close-up</option><option value="Extreme close-up">Extreme Close-up</option><option value="Profile shot">Profile</option><option value="Back view">Back View</option><option value="Over the shoulder">Over Shoulder</option><option value="Low angle">Low Angle</option><option value="High angle">High Angle</option>
+                                    <option value="other" class="text-yellow-400 font-bold">Other ✏️</option>
+                                </select>
+                                <input type="text" id="people-frame-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white">
+                            </div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Pose & Ekspresi</label>
+                                <select id="people-pose" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                                    <option value="Candid pose">Candid</option><option value="Looking directly at camera">Eye Contact</option><option value="Looking away">Looking Away</option><option value="Dynamic action pose">Action</option><option value="Walking towards camera">Walking</option><option value="Serious expression">Serious</option><option value="Smiling">Smiling</option><option value="High fashion pose">High Fashion</option><option value="Hands on hips">Hands on Hips</option><option value="Leaning against wall">Leaning</option><option value="Sitting on a throne">Duduk di Takhta</option><option value="Standing proud">Royal Stance</option><option value="Holding a scepter">Pegang Tongkat</option><option value="Crossed arms">Crossed Arms</option><option value="Sad/Crying">Sad</option><option value="Angry">Angry</option><option value="Sleeping">Sleeping</option>
+                                    <option value="other" class="text-yellow-400 font-bold">Other ✏️</option>
+                                </select>
+                                <input type="text" id="people-pose-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white">
+                            </div>
+                        </div>
+                        <div class="space-y-2 mt-5 border-t border-gray-700 pt-4"><label class="text-sm text-gray-300 font-bold text-emerald-400">Latar Belakang</label><select id="people-bg" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="">(Default)</option><optgroup label="Nature"><option value="Beautiful city park">Taman Kota</option><option value="Enchanted forest">Hutan Ajaib</option><option value="Tropical beach">Pantai</option><option value="Flower garden">Taman Bunga</option><option value="Snowy mountain peak">Gunung Salju</option><option value="Autumn path">Jalan Gugur</option><option value="Desert sand dunes">Gurun</option><option value="Waterfall in jungle">Air Terjun</option></optgroup><optgroup label="Urban"><option value="Busy New York city street">NY Street</option><option value="Tokyo neon street">Tokyo Neon</option><option value="Parisian cafe terrace">Paris Cafe</option><option value="Modern office skyscraper">Office</option><option value="Rooftop bar">Rooftop</option><option value="Subway station">Subway</option><option value="Graffiti wall">Graffiti Wall</option></optgroup><optgroup label="Indoor"><option value="Luxury hotel suite">Hotel Suite</option><option value="Cozy bedroom">Bedroom</option><option value="Modern kitchen">Kitchen</option><option value="Library">Library</option><option value="Coffee shop interior">Coffee Shop</option><option value="Gym fitness center">Gym</option><option value="Art gallery">Art Gallery</option></optgroup><optgroup label="Studio"><option value="Solid white studio background">Solid White</option><option value="Solid black studio background">Solid Black</option><option value="Abstract bokeh lights">Bokeh</option><option value="Textured old concrete wall">Textured Wall</option><option value="Smoke and fog atmosphere">Smoke & Fog</option></optgroup><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="people-bg-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white" placeholder="Deskripsi background..."></div>
+                    </div>
+
+                    <!-- 4. FORM FNB -->
+                    <div id="form-fnb" class="space-y-6 hidden form-content">
+                        <div class="bg-fnb/10 p-4 rounded-lg border border-fnb/20 text-sm text-fnb mb-4 flex items-start gap-3"><i class="fas fa-utensils mt-1"></i> <div><strong>Mode FnB</strong></div></div>
+                        <div class="space-y-2"><label class="text-sm text-gray-300">Nama Makanan</label><input type="text" id="fnb-subject" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white" placeholder="Contoh: Beef Burger..."></div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Kategori</label><select id="fnb-category" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><optgroup label="Main"><option value="Main Course">Main Course</option><option value="Steak dish">Steak</option><option value="Noodle soup">Noodle</option></optgroup><optgroup label="Snack"><option value="Street food">Street Food</option><option value="Burger and fries">Burger</option><option value="Pizza">Pizza</option></optgroup><optgroup label="Sweet"><option value="Dessert cake">Cake</option><option value="Ice cream">Ice Cream</option></optgroup><optgroup label="Drink"><option value="Coffee latte">Coffee</option><option value="Juice">Juice</option><option value="Cocktail">Cocktail</option></optgroup><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="fnb-category-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Gaya Masakan</label><select id="fnb-style" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="Indonesian cuisine">Indonesian</option><option value="Japanese cuisine">Japanese</option><option value="Western cuisine">Western</option><option value="Italian cuisine">Italian</option><option value="Chinese cuisine">Chinese</option><option value="Korean cuisine">Korean</option><option value="Mexican cuisine">Mexican</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="fnb-style-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Plating</label><select id="fnb-plating" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="Fine dining plating">Fine Dining</option><option value="Rustic home style">Rustic</option><option value="Bento box">Bento</option><option value="Street food style">Street</option><option value="Flat lay">Flat Lay</option><option value="Levitating">Levitation</option><option value="Messy delicious">Messy</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="fnb-plating-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Angle</label><select id="fnb-angle" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="45 degree angle">45 Degree</option><option value="Top down flat lay">Top Down</option><option value="Eye level">Eye Level</option><option value="Macro shot">Macro</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="fnb-angle-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Lighting</label><select id="fnb-light" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="Natural window light">Natural</option><option value="Softbox lighting">Softbox</option><option value="Backlight for steam">Backlight</option><option value="Moody dark">Moody</option><option value="Hard flash">Hard Flash</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="fnb-light-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Efek</label><select id="fnb-effect" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="Hot steam rising">Steam</option><option value="Fresh water droplets">Water Droplets</option><option value="Melting cheese">Melting Cheese</option><option value="Chocolate drip">Choco Drip</option><option value="Splash liquid">Splash</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="fnb-effect-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                        </div>
+                    </div>
+
+                    <!-- 5. FORM SPORTS (UPDATED: NEW DESCRIPTION FIELD) -->
+                    <div id="form-sports" class="space-y-6 hidden form-content">
+                        <div class="bg-sports/5 p-4 rounded-lg border border-sports/20 text-sm text-sports mb-4 flex items-start gap-3"><i class="fas fa-futbol mt-1"></i> <div><strong>Mode Sports</strong></div></div>
+                        <!-- Moved full width description to top -->
+                        <div class="space-y-2"><label class="text-sm text-gray-300">Deskripsi Tambahan</label><input type="text" id="sports-subject" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white" placeholder="Contoh: wearing red jersey, Manchester United..."></div>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Jenis Olahraga</label><select id="sports-type" onchange="updateSportActions()" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="Football/Futsal">Futsal/Bola</option><option value="Basketball">Bola Basket</option><option value="Badminton">Bulutangkis</option><option value="Volleyball">Bola Voli</option><option value="Tennis">Tenis</option><option value="Swimming">Renang</option><option value="Martial Arts">Bela Diri</option><option value="Cycling">Sepeda</option><option value="Running">Lari</option><option value="Gym/Fitness">Gym</option><option value="MotoGP/Racing">Balap</option></select></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Gerakan</label><select id="sports-action" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"></select><input type="text" id="sports-action-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Shutter</label><select id="sports-cam" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="">(Auto)</option><option value="Frozen action">Frozen Action</option><option value="Motion blur background">Motion Blur</option><option value="Long exposure light trails">Long Exposure</option><option value="Zoom burst effect">Zoom Burst</option><option value="Slow motion capture">Slow Motion</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="sports-cam-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Situasi</label><select id="sports-context" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="">(Default)</option><option value="Championship final match">Final Kejuaraan</option><option value="Training session">Latihan</option><option value="Street match">Jalanan</option><option value="Friendly match">Friendly</option><option value="Penalty kick moment">Penalti</option><option value="Post-match interview">Wawancara</option><option value="Locker room preparation">Locker Room</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="sports-context-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Vibe</label><select id="sports-vibe" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="Sweaty and gritty">Sweaty</option><option value="Stadium atmosphere">Stadium</option><option value="Clean studio">Clean</option><option value="Dramatic rain match">Rain</option><option value="Nike/Adidas commercial style">Commercial</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="sports-vibe-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                             <div class="space-y-2 md:col-span-2"><label class="text-sm text-gray-300">Lapangan</label><select id="sports-field" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="">(Default)</option><option value="Indoor futsal court">Futsal Parket</option><option value="Indoor futsal court vinyl">Futsal Vinyl</option><option value="Synthetic grass">Sintetis</option><option value="Natural green grass">Rumput Asli</option><option value="Muddy field">Becek</option><option value="Concrete street court">Semen</option><option value="Grand stadium">Stadion</option><option value="Dusty sand field">Tanah/Debu</option><option value="School gymnasium">Gym Sekolah</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="sports-field-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                        </div>
+                    </div>
+
+                    <!-- 6. FORM LANDSCAPE -->
+                    <div id="form-landscape" class="space-y-6 hidden form-content">
+                        <div class="bg-accent/5 p-4 rounded-lg border border-accent/20 text-sm text-accent mb-4 flex items-start gap-3"><i class="fas fa-mountain mt-1"></i> <div><strong>Mode Landscape</strong></div></div>
+                        <div class="space-y-2"><label class="text-sm text-gray-300">Lokasi</label><input type="text" id="land-subject" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white" placeholder="Contoh: Waterfall..."></div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Komposisi</label><select id="land-comp" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="">(Default)</option><option value="Wide angle shot">Wide Angle</option><option value="Drone aerial view">Drone View</option><option value="Low angle shot">Low Angle</option><option value="Telephoto lens">Telephoto</option><option value="Macro shot">Macro</option><option value="Through the trees framing">Framing</option><option value="Reflection symmetry">Simetris</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="land-comp-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Atmosfer</label><select id="land-effect" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="">(None)</option><option value="Morning mist">Mist</option><option value="God rays">God Rays</option><option value="Heat haze">Heat Haze</option><option value="Falling petals">Falling Petals</option><option value="Dust particles">Dust</option><option value="Dramatic storm clouds">Storm</option><option value="Aurora borealis">Aurora</option><option value="Lens flare">Lens Flare</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="land-effect-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Waktu</label><select id="land-time" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="Golden hour">Golden Hour</option><option value="Blue hour">Blue Hour</option><option value="High noon">High Noon</option><option value="Midnight">Midnight</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="land-time-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Bioma</label><select id="land-season" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="">(Default)</option><option value="Spring">Spring</option><option value="Summer">Summer</option><option value="Autumn">Autumn</option><option value="Winter">Winter</option><option value="Desert">Desert</option><option value="Tropical beach">Beach</option><option value="Mountain peaks">Mountain</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="land-season-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2 md:col-span-2"><label class="text-sm text-gray-300">Air</label><select id="land-water" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="">(None)</option><option value="Calm water">Tenang</option><option value="Turbulent waves">Ombak</option><option value="Long exposure water">Silky</option><option value="Frozen lake">Frozen</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="land-water-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                        </div>
+                    </div>
+
+                    <!-- 7. FORM LANDMARK -->
+                    <div id="form-landmark" class="space-y-6 hidden form-content">
+                         <div class="bg-landmark/5 p-4 rounded-lg border border-landmark/20 text-sm text-landmark mb-4 flex items-start gap-3"><i class="fas fa-city mt-1"></i> <div><strong>Mode Landmark</strong></div></div>
+                        <div class="space-y-2"><label class="text-sm text-gray-300">Bangunan</label><input type="text" id="mark-subject" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white" placeholder="Contoh: Skyscraper..."></div>
+                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Lingkungan</label><select id="mark-env" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="">(Default)</option><option value="Surrounded by dense forest">Hutan Lebat</option><option value="In a busy futuristic city">Cyberpunk City</option><option value="On a cliff edge">Tebing</option><option value="In the middle of a desert">Gurun</option><option value="Snow covered landscape">Salju</option><option value="Busy street">Kota Sibuk</option><option value="Floating in sky">Floating</option><option value="Underwater ruins">Underwater</option><option value="Isolated island">Island</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="mark-env-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Pencahayaan</label><select id="mark-light" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="">(Default)</option><option value="Warm interior lights glowing">Interior Glow</option><option value="Sunset reflection on glass">Sunset Reflection</option><option value="Dramatic hard shadows">Hard Shadows</option><option value="Cyberpunk neon lights">Neon</option><option value="Golden hour sunlight">Golden Hour</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="mark-light-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Era</label><select id="mark-era" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="Modern minimalist architecture">Modern Minimalist</option><option value="Futuristic cyberpunk city">Futuristic</option><option value="Ancient roman ruins">Roman</option><option value="Gothic architecture">Gothic</option><option value="Colonial style building">Colonial</option><option value="Traditional Japanese architecture">Japanese</option><option value="Industrial factory style">Industrial</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="mark-era-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Perspektif</label><select id="mark-view" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="Drone aerial view">Drone</option><option value="Street level view">Street</option><option value="Worm-eye view">Worm-eye</option><option value="Isometric view">Isometric</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="mark-view-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Material</label><select id="mark-material" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="">(Default)</option><option value="Glass and steel facade">Kaca & Baja</option><option value="Red brick wall">Bata Merah</option><option value="Exposed concrete">Beton</option><option value="White marble">Marmer</option><option value="Wooden structure">Kayu</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="mark-material-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Kondisi</label><select id="mark-condition" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="">(Default)</option><option value="Brand new, pristine">Baru</option><option value="Weathered, aged">Tua</option><option value="Overgrown with nature">Berlumut</option><option value="Ruined, destroyed">Reruntuhan</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="mark-condition-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                        </div>
+                    </div>
+
+                    <!-- 8. FORM LOGO -->
+                    <div id="form-logo" class="space-y-6 hidden form-content">
+                        <div class="bg-logo/5 p-4 rounded-lg border border-logo/20 text-sm text-logo mb-4 flex items-start gap-3"><i class="fas fa-shield-alt mt-1"></i> <div><strong>Mode Logo</strong></div></div>
+                        <div class="space-y-2"><label class="text-sm text-gray-300">Nama Logo</label><input type="text" id="logo-subject" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white" placeholder="Contoh: Lion Head..."></div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Gaya</label><select id="logo-style" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="Esports mascot logo">Maskot E-sport</option><option value="Minimalist line art logo">Garis Minimalis</option><option value="Vintage badge">Emblem Klasik</option><option value="Lettermark logo">Huruf</option><option value="Flat vector icon">Flat Icon</option><option value="3D realistic logo">3D</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="logo-style-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Latar</label><select id="logo-bg" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="Solid white background">Putih Polos</option><option value="Solid black background">Hitam Polos</option><option value="Paper mockup texture">Mockup Kertas</option><option value="3D wall signage">Dinding 3D</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="logo-bg-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                        </div>
+                    </div>
+
+                    <!-- 9. FORM TEXTURE -->
+                    <div id="form-texture" class="space-y-6 hidden form-content">
+                        <div class="bg-indigo-500/10 p-4 rounded-lg border border-indigo-500/20 text-sm text-indigo-400 mb-4 flex items-start gap-3"><i class="fas fa-layer-group mt-1"></i> <div><strong>Mode Texture</strong></div></div>
+                        <div class="space-y-2"><label class="text-sm text-gray-300">Ide Motif</label><input type="text" id="tex-subject" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white" placeholder="Contoh: Batik..."></div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Jenis Pola</label><select id="tex-type" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="Seamless geometric pattern">Geometris</option><option value="Abstract camouflage pattern">Loreng</option><option value="Traditional Batik pattern">Batik Modern</option><option value="Floral tropical pattern">Bunga</option><option value="Tech circuit board">Sirkuit</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="tex-type-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Vibe</label><select id="tex-vibe" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="Retro 90s memphis style">Retro 90an</option><option value="Luxury gold and black">Mewah</option><option value="Dark tactical stealth">Taktikal</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="tex-vibe-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                        </div>
+                    </div>
+
+                    <!-- 10. FORM INTERIOR (UPDATED: NEW DESCRIPTION FIELD) -->
+                    <div id="form-interior" class="space-y-6 hidden form-content">
+                        <div class="bg-interior/10 p-4 rounded-lg border border-interior/20 text-sm text-interior mb-4 flex items-start gap-3"><i class="fas fa-couch mt-1"></i> <div><strong>Mode Interior</strong></div></div>
+                        <!-- New Description Field -->
+                        <div class="space-y-2"><label class="text-sm text-gray-300">Deskripsi Tambahan</label><input type="text" id="int-subject" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white" placeholder="Contoh: Red sofa and a cat..."></div>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Jenis Ruangan</label><select id="int-room" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                                <optgroup label="Rumah"><option value="Modern living room">Living Room</option><option value="Master bedroom">Bedroom</option><option value="Modern kitchen">Kitchen</option></optgroup>
+                                <optgroup label="Bisnis"><option value="Sportswear retail store">Sportswear Store</option><option value="Fashion boutique">Boutique</option><option value="Sneaker shop">Sneaker Shop</option><option value="Coffee shop cafe">Coffee Shop</option><option value="Restaurant">Restaurant</option></optgroup>
+                                <optgroup label="Lainnya"><option value="Football locker room">Locker Room</option><option value="Gaming room setup">Gaming Room</option><option value="Modern office">Office</option></optgroup>
+                                <option value="other" class="text-yellow-400 font-bold">Other ✏️</option>
+                            </select><input type="text" id="int-room-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Gaya</label><select id="int-style" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="Minimalist">Minimalist</option><option value="Scandinavian">Scandinavian</option><option value="Japandi">Japandi</option><option value="Industrial">Industrial</option><option value="Mid-century modern">Mid-Century</option><option value="Art Deco">Art Deco</option><option value="Bohemian">Bohemian</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="int-style-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                             <div class="space-y-2"><label class="text-sm text-gray-300">Material</label><select id="int-material" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="">(Default)</option><option value="Marble and gold">Marble & Gold</option><option value="Concrete and steel">Concrete</option><option value="Wood and white">Wood</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="int-material-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Lighting</label><select id="int-lighting" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="">(Default)</option><option value="Natural window light">Natural</option><option value="Golden hour sunlight">Golden Hour</option><option value="Soft ambient">Soft Ambient</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="int-lighting-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                        </div>
+                    </div>
+
+                    <!-- 11. FORM FANTASY (UPDATED: NEW DESCRIPTION FIELD) -->
+                    <div id="form-fantasy" class="space-y-6 hidden form-content">
+                        <div class="bg-fantasy/10 p-4 rounded-lg border border-fantasy/20 text-sm text-fantasy mb-4 flex items-start gap-3"><i class="fas fa-dragon mt-1"></i> <div><strong>Mode Fantasy</strong></div></div>
+                        <!-- New Description Field -->
+                        <div class="space-y-2"><label class="text-sm text-gray-300">Deskripsi Tambahan</label><input type="text" id="rpg-subject" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white" placeholder="Contoh: Holding a giant glowing axe..."></div>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Ras</label><select id="rpg-race" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                                <option value="">(Human)</option>
+                                <optgroup label="Classic"><option value="Human">Human</option><option value="High Elf">High Elf</option><option value="Wood Elf">Wood Elf</option><option value="Dark Elf">Dark Elf</option><option value="Dwarf">Dwarf</option><option value="Orc">Orc</option></optgroup>
+                                <optgroup label="Exotic"><option value="Tiefling">Tiefling</option><option value="Dragonborn">Dragonborn</option><option value="Angel">Angel</option><option value="Demon">Demon</option></optgroup>
+                                <optgroup label="Sci-Fi"><option value="Cyborg">Cyborg</option><option value="Android">Android</option><option value="Alien">Alien</option></optgroup>
+                                <option value="other" class="text-yellow-400 font-bold">Other ✏️</option>
+                            </select><input type="text" id="rpg-race-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Kelas</label><select id="rpg-class" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                                <option value="Warrior">Warrior</option>
+                                <optgroup label="Melee"><option value="Medieval Knight">Knight</option><option value="Barbarian">Barbarian</option><option value="Samurai">Samurai</option></optgroup>
+                                <optgroup label="Magic"><option value="Wizard">Wizard</option><option value="Sorcerer">Sorcerer</option><option value="Warlock">Warlock</option></optgroup>
+                                <option value="other" class="text-yellow-400 font-bold">Other ✏️</option>
+                            </select><input type="text" id="rpg-class-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Armor</label><select id="rpg-armor" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"><option value="">(Default)</option><option value="Heavy Plate Armor">Plate Armor</option><option value="Leather Armor">Leather</option><option value="Wizard Robes">Robes</option><option value="other" class="text-yellow-400 font-bold">Other ✏️</option></select><input type="text" id="rpg-armor-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+
+                            <div class="space-y-2"><label class="text-sm text-gray-300">Setting</label><select id="rpg-setting" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                                <option value="Fantasy Kingdom">Kingdom</option>
+                                <optgroup label="Fantasy"><option value="Throne Room">Throne Room</option><option value="Wizard Tower">Wizard Tower</option></optgroup>
+                                <optgroup label="Sci-Fi/History"><option value="Cyberpunk City">Cyberpunk City</option><option value="Space Station">Space Station</option></optgroup>
+                                <option value="other" class="text-yellow-400 font-bold">Other ✏️</option>
+                            </select><input type="text" id="rpg-setting-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                            
+                             <div class="space-y-2"><label class="text-sm text-gray-300">Gaya Seni</label><select id="rpg-style" onchange="toggleOther(this)" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                                <option value="">(Default)</option>
+                                <option value="Dungeons and Dragons 5e book art style">D&D Art</option>
+                                <option value="Dark Souls style">Dark Souls</option>
+                                <option value="Studio Ghibli fantasy style">Ghibli</option>
+                                <option value="Cyberpunk 2077 concept art">Cyberpunk</option>
+                                <option value="other" class="text-yellow-400 font-bold">Other ✏️</option>
+                            </select><input type="text" id="rpg-style-other" class="hidden w-full mt-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg other-input text-white"></div>
+                        </div>
+                    </div>
+                
+                </div>
+
+            </div>
+
+            <!-- FOOTER AREA -->
+            <div id="footer-actions" class="p-5 md:p-8 border-t border-gray-700 bg-gray-800/20 backdrop-blur-sm sticky bottom-0 flex flex-col gap-4">
+                <div class="flex gap-2">
+                    <textarea id="result" readonly class="w-full p-4 bg-gray-900 border border-gray-700 rounded-lg text-gray-200 font-mono text-sm resize-none h-24 focus:ring-2 focus:ring-primary outline-none" placeholder="Hasil prompt..."></textarea>
+                    <div class="flex flex-col gap-2">
+                        <button onclick="copyToClipboard()" title="Copy" class="bg-emerald-600 hover:bg-emerald-500 text-white p-3 rounded-lg font-medium shadow-lg transition"><i class="fas fa-copy"></i></button>
+                        <button onclick="saveToHistory()" title="Simpan" class="bg-blue-600 hover:bg-blue-500 text-white p-3 rounded-lg font-medium shadow-lg transition"><i class="fas fa-bookmark"></i></button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                     <div class="flex gap-2">
+                        <select id="ratio" class="w-1/2 px-3 py-3 bg-gray-700 border border-gray-600 rounded-lg outline-none text-white text-sm"><option value="--ar 16:9">Landscape 16:9</option><option value="--ar 9:16">Portrait 9:16</option><option value="--ar 1:1">Square 1:1</option><option value="--ar 4:5">IG Feed 4:5</option></select>
+                        <input type="text" id="negative" class="w-1/2 px-3 py-3 bg-gray-700 border border-gray-600 rounded-lg outline-none text-white text-sm" placeholder="Negative Prompt...">
+                    </div>
+                    <button onclick="generatePrompt()" id="generate-btn" class="w-full py-3 bg-primary text-white font-bold rounded-lg shadow-lg hover:brightness-110 transition flex items-center justify-center gap-2">
+                        <i class="fas fa-magic"></i> Generate Magic Prompt
+                    </button>
                 </div>
             </div>
-        </div>
-    </main>
 
-     <!-- Notification Toast -->
-    <div id="toast" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-slate-800 dark:bg-slate-800 border border-slate-700 dark:border-indigo-500/50 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 translate-y-20 opacity-0 transition-all duration-300 z-[60]">
-        <i class="fa-solid fa-check-circle text-green-400"></i>
-        <span id="toast-msg" class="text-sm font-medium">Action Successful</span>
+        </div>
     </div>
 
-    <!-- FIREBASE SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // User Provided Config
-        const userFirebaseConfig = {
-          apiKey: "AIzaSyBVUDPpQaZ8GkfCZya0gT2k8GLnWJKun-A",
-          authDomain: "promtai-cfb29.firebaseapp.com",
-          projectId: "promtai-cfb29",
-          storageBucket: "promtai-cfb29.firebasestorage.app",
-          messagingSenderId: "361929858262",
-          appId: "1:361929858262:web:050200e5dcb18c4885bd77"
-        };
+        let firebaseConfig;
+        if (typeof __firebase_config !== 'undefined') {
+            firebaseConfig = JSON.parse(__firebase_config);
+        } else {
+             firebaseConfig = { apiKey: "AIzaSyBVUDPpQaZ8GkfCZya0gT2k8GLnWJKun-A", authDomain: "promtai-cfb29.firebaseapp.com", projectId: "promtai-cfb29", storageBucket: "promtai-cfb29.firebasestorage.app", messagingSenderId: "361929858262", appId: "1:361929858262:web:050200e5dcb18c4885bd77" };
+        }
 
-        window.db = null;
-        window.auth = null;
-        window.user = null;
-        window.appId = 'imperial-studio'; 
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        let currentUser = null;
+        let localLibrary = [];
 
-        async function initFirebase() {
+        async function initAuth() {
             try {
-                if (userFirebaseConfig && userFirebaseConfig.apiKey) {
-                    const app = initializeApp(userFirebaseConfig);
-                    window.auth = getAuth(app);
-                    window.db = getFirestore(app);
-
-                    onAuthStateChanged(window.auth, (u) => {
-                        if (u) {
-                            window.user = u;
-                            document.getElementById('sync-status').innerHTML = '<i class="fa-solid fa-circle text-green-500"></i> Cloud Active';
-                            loadHistoryFromCloud();
-                        } else {
-                            signInAnonymously(window.auth).catch(console.error);
-                        }
-                    });
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
                 } else {
-                    console.log("No Firebase config found.");
+                    await signInAnonymously(auth);
                 }
-            } catch (e) {
-                console.log("Firebase init skipped/failed", e);
+            } catch (error) {
+                console.error("Auth Error:", error);
+                document.getElementById('db-status').innerHTML = '<span class="text-red-500">Auth Failed</span>';
             }
         }
-        
-        window.saveToCloud = async (text, subject, category) => {
-             if (!window.db || !window.user) return false; 
-             try {
-                await addDoc(collection(window.db, 'artifacts', window.appId, 'users', window.user.uid, 'prompts'), {
-                    prompt: text,
-                    subject: subject,
-                    categoryLabel: category,
-                    timestamp: new Date().toISOString()
-                });
-                return true;
-             } catch(e) {
-                 console.error("Cloud save failed", e);
-                 return false;
-             }
-        };
+        initAuth();
 
-        function loadHistoryFromCloud() {
-             if (!window.db || !window.user) return;
-             const q = collection(window.db, 'artifacts', window.appId, 'users', window.user.uid, 'prompts');
-             onSnapshot(q, (snapshot) => {
-                 let history = [];
-                 snapshot.forEach(doc => history.push(doc.data()));
-                 history.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
-                 localStorage.setItem('imp_history', JSON.stringify(history));
-                 if(window.updateHistoryFilters) window.updateHistoryFilters();
-                 if(window.loadHistory) window.loadHistory();
-             }, (error) => { console.error("History sync error", error); });
-        }
-
-        initFirebase();
-    </script>
-    
-    <script>
-        // --- HELPERS ---
-        function debounce(func, wait) {
-            let timeout;
-            return function(...args) {
-                const context = this;
-                clearTimeout(timeout);
-                timeout = setTimeout(() => func.apply(context, args), wait);
-            };
-        }
-
-        // --- DATA ---
-        const moods = ["Ethereal", "Ominous", "Cheerful", "Melancholic", "Epic", "Serene", "Chaotic", "Dreamy", "Mysterious", "Romantic", "Cozy", "Intense"];
-        const subCategories = {
-            'street_editorial_vintage': [{ val: 'default', label: 'Default', prompt: '' }],
-            'poetic_cinema_alley': [{ val: 'default', label: 'Default', prompt: '' }],
-            'wallpaper_desktop': [
-                { val: 'nature_scape', label: 'Nature Landscape', prompt: ', majestic landscape wallpaper, mountains, lake reflection, 8k resolution, highly detailed, desktop background' },
-                { val: 'cyber_city', label: 'Cyberpunk City', prompt: ', futuristic city skyline, neon lights, skyscrapers, night time, desktop wallpaper 4k, sci-fi atmosphere' },
-                { val: 'gaming_room', label: 'Gaming Setup', prompt: ', futuristic gaming room setup, rgb lighting, multiple screens, cozy atmosphere, isometric view, 8k render' },
-                { val: 'space_nebula', label: 'Deep Space', prompt: ', deep space nebula, vibrant colors, stars, galaxy, cosmic dust, cinematic wallpaper 8k' },
-                { val: 'abstract_fluid', label: 'Abstract Fluid', prompt: ', abstract fluid art, swirling colorful liquids, acrylic pour style, vibrant, 4k background' },
-                { val: 'minimalist_desk', label: 'Minimalist', prompt: ', minimalist desktop wallpaper, clean lines, simple shapes, pastel colors, calming' }
-            ],
-            'wallpaper_mobile': [
-                { val: 'aesthetic_clouds', label: 'Aesthetic Clouds', prompt: ', dreamy pastel clouds, sunset sky, phone wallpaper, vertical composition, ethereal' },
-                { val: 'neon_street', label: 'Neon Street', prompt: ', vertical city street at night, neon signs, rain reflection, cyberpunk vibe, phone background' },
-                { val: 'dark_oled', label: 'Dark OLED', prompt: ', true black background, minimal white lines, geometric shape, oled friendly, high contrast' },
-                { val: 'flower_macro', label: 'Floral Macro', prompt: ', macro flower photography, dew drops, vibrant petals, vertical wallpaper, sharp focus' },
-                { val: 'anime_portrait', label: 'Anime Portrait', prompt: ', vertical anime character portrait, high quality art, detailed background, mobile wallpaper' }
-            ],
-            'wallpaper_ultrawide': [
-                { val: 'panoramic_view', label: 'Panoramic View', prompt: ', panoramic landscape view, horizon line, wide angle, epic scale, 21:9 wallpaper' },
-                { val: 'coding_setup', label: 'Coding/Hacker', prompt: ', matrix code rain, cyber security theme, dark green and black, digital texture, ultrawide background' },
-                { val: 'fantasy_world', label: 'Fantasy World', prompt: ', sprawling fantasy kingdom, castle in distance, dragon flying, epic wide shot, highly detailed' }
-            ],
-            'religious': [{ val: 'mosque', label: 'Mesjid', prompt: ', grand mosque architecture, islamic geometric patterns, minarets, dome, golden hour light, spiritual atmosphere' }, { val: 'church', label: 'Gereja', prompt: ', gothic cathedral, stained glass windows, spires, stone texture, dramatic lighting, holy atmosphere' }],
-            'public_venue': [{ val: 'stadium', label: 'Stadion', prompt: ', huge sports stadium, floodlights, crowd in distance, green field, modern architecture, aerial view' }, { val: 'museum', label: 'Museum', prompt: ', contemporary art museum, clean lines, white walls, glass facade, architectural masterpiece' }],
-            'historical': [{ val: 'castle', label: 'Kastil', prompt: ', medieval castle, stone walls, moat, towers, hilltop location, epic fantasy landscape' }, { val: 'ruins', label: 'Reruntuhan', prompt: ', ancient ruins, broken pillars, overgrown vines, archaeological site, mysterious history' }],
-            'commercial_arch': [{ val: 'mall', label: 'Mall', prompt: ', modern shopping mall interior, atrium, escalators, glass roof, busy shoppers, bright lighting' }, { val: 'hotel', label: 'Hotel', prompt: ', luxury beach resort, swimming pool, palm trees, sunset view, relaxing holiday vibe' }],
-            'sports': [{ val: 'soccer', label: 'Sepak Bola', prompt: ', playing soccer, dynamic kicking pose, stadium lights background, detailed jersey, grass particles' }, { val: 'basketball', label: 'Basket', prompt: ', playing basketball, slam dunk action, sweat details, basketball court background, dynamic motion' }],
-            'food_porn': [{ val: 'dessert', label: 'Dessert', prompt: ', delicious dessert, sweet, creamy texture, garnishing, macro shot, food magazine style' }, { val: 'main_course', label: 'Main Course', prompt: ', gourmet main course, steaming hot, rich texture, restaurant plating, juicy details' }],
-            'product': [{ val: 'apparel', label: 'Pakaian', prompt: ', clothing product photography, ghost mannequin effect, high quality fabric texture, studio lighting, clean background, fashion catalog style' }, { val: 'bag_fashion', label: 'Tas & Aksesoris', prompt: ', fashion accessory product shot, bag worn by model, dynamic pose, professional photoshoot, detailed texture, focus on product, commercial lifestyle' }, { val: 'tech', label: 'Gadget', prompt: ', sleek smartphone product shot, clean studio lighting, reflection, high tech vibe' }],
-            'casual': [{ val: 'streetwear', label: 'Streetwear', prompt: ', streetwear fashion, hoodie, sneakers, urban city background, hypebeast style' }, { val: 'vintage', label: 'Vintage', prompt: ', vintage 90s fashion, retro aesthetic, film grain, old camera style' }],
-            'concept_art': [{ val: 'character_design', label: 'Karakter', prompt: ', character design sheet' }, { val: 'environment', label: 'Environment', prompt: ', wide environment concept art' }],
-            'portrait_pro': [{ val: 'business', label: 'Bisnis', prompt: ', professional headshot' }, { val: 'fashion_editorial', label: 'Fashion', prompt: ', high fashion editorial' }],
-            'landscape_nature': [{ val: 'mountain', label: 'Gunung', prompt: ', majestic snowy mountains' }, { val: 'beach', label: 'Pantai', prompt: ', tropical beach, turquoise water' }],
-            'street_photo': [{ val: 'night_rain', label: 'Malam Hujan', prompt: ', cyberpunk city street at night' }, { val: 'market', label: 'Pasar', prompt: ', busy traditional market' }],
-            'macro_detail': [{ val: 'insect', label: 'Serangga', prompt: ', macro shot of an insect' }, { val: 'flower', label: 'Bunga', prompt: ', macro shot of a flower center' }],
-            'arch_modern': [{ val: 'modern_house', label: 'Rumah', prompt: ', modern minimalist house' }, { val: 'skyscraper', label: 'Gedung', prompt: ', towering skyscraper' }],
-            'dailylife': [{ val: 'working', label: 'Kerja', prompt: ', person working on laptop' }, { val: 'reading', label: 'Baca', prompt: ', reading a book' }],
-            'automotive': [{ val: 'supercar', label: 'Supercar', prompt: ', luxury supercar' }, { val: 'classic', label: 'Klasik', prompt: ', vintage classic car' }],
-            'fantasy_rpg': [{ val: 'warrior', label: 'Warrior', prompt: ', armored knight' }, { val: 'mage', label: 'Mage', prompt: ', wizard casting spell' }],
-            'pixel_retro': [{ val: '16bit', label: '16-bit', prompt: ', 16-bit pixel art' }, { val: 'character_sprite', label: 'Sprite', prompt: ', pixel art character sprite' }],
-            'vector_flat': [{ val: 'icon', label: 'Icon', prompt: ', app icon design' }, { val: 'illustration', label: 'Ilustrasi', prompt: ', flat vector illustration' }],
-            'sticker_cute': [{ val: 'animal', label: 'Hewan', prompt: ', cute animal sticker' }, { val: 'food', label: 'Makanan', prompt: ', cute food sticker' }],
-            'logo_minimal': [{ val: 'wordmark', label: 'Teks', prompt: ', minimalist wordmark logo' }, { val: 'emblem', label: 'Simbol', prompt: ', simple geometric symbol logo' }],
-            'character_3d': [{ val: 'pixar', label: 'Pixar', prompt: ', pixar style character' }, { val: 'realistic_3d', label: 'Realistik', prompt: ', hyperrealistic 3d character' }],
-            'interior_design': [{ val: 'living_room', label: 'Ruang Tamu', prompt: ', modern living room' }, { val: 'kitchen', label: 'Dapur', prompt: ', luxury modern kitchen' }],
-            'anime': [{ val: 'action', label: 'Action', prompt: ', dynamic anime action scene' }, { val: 'slice_of_life', label: 'Slice of Life', prompt: ', peaceful anime school setting' }],
-            'painting': [{ val: 'oil', label: 'Oil', prompt: ', oil painting texture' }, { val: 'watercolor', label: 'Watercolor', prompt: ', watercolor painting' }]
-        };
-
-        // --- GLOBAL SCOPE ---
-        let els = {};
-        let radarChart;
-
-        // --- FUNCTIONS ---
-        window.renderMoods = function() {
-            const container = document.getElementById('mood-chips');
-            if(!container) return;
-            container.innerHTML = '';
-            moods.forEach(m => {
-                const btn = document.createElement('button');
-                btn.className = "px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded text-[10px] hover:bg-indigo-100 dark:hover:bg-slate-600 transition";
-                btn.textContent = m;
-                btn.onclick = () => {
-                    const sub = document.getElementById('subject');
-                    if(sub) { sub.value += `, ${m} atmosphere`; window.updateOutput(); }
-                };
-                container.appendChild(btn);
-            });
-        }
-
-        window.getAutoBackground = function(style, subject) {
-            if((style && style.includes('Cyberpunk')) || (subject && subject.includes('neon'))) return "futuristic city";
-            if(subject.toLowerCase().includes('mosque')) return "blue sky, courtyard";
-            return "detailed background";
-        }
-
-        window.toggleTheme = function() {
-             const html = document.documentElement;
-             const isDark = html.classList.toggle('dark');
-             const icon = document.getElementById('theme-icon');
-             if(icon) icon.className = isDark ? "fa-solid fa-sun" : "fa-solid fa-moon";
-             localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        };
-
-        window.updateOutput = function() {
-            if(!document.getElementById('subject')) return;
-            
-            const subject = document.getElementById('subject').value;
-            const negative = document.getElementById('negative')?.value || "";
-            const gender = document.getElementById('gender')?.value || "";
-            const age = document.getElementById('age')?.value || "";
-            const targetAudience = document.getElementById('target-audience')?.value || "";
-            const detailLevel = document.querySelector('input[name="detail_level"]:checked')?.value || 'medium';
-
-            const model = document.querySelector('input[name="model"]:checked')?.value || 'generic';
-            const ar = document.querySelector('input[name="ar"]:checked')?.value || '1:1';
-            const mainCat = document.getElementById('quality-preset')?.value || "";
-            const subCatVal = document.getElementById('sub-category')?.value || "";
-            const poseVal = document.getElementById('pose')?.value || "";
-            const style = document.getElementById('style')?.value || "";
-            const lighting = document.getElementById('lighting')?.value || "";
-            const background = document.getElementById('background')?.value || "";
-            const lens = document.getElementById('lens')?.value || "";
-            const stylize = document.getElementById('stylize')?.value || "100";
-            const chaos = document.getElementById('chaos')?.value || "0";
-            const seed = document.getElementById('seed')?.value || "";
-            
-            // New Outfit
-            const outfit = document.getElementById('outfit')?.value || "";
-
-            let promptSegments = [];
-            
-            // 1. Subject & Demographics
-            let processedSubject = subject;
-            let demography = [];
-            if (gender) demography.push(gender);
-            if (age) demography.push(age);
-            if (demography.length > 0) processedSubject += `, ${demography.join(" ")}`;
-
-            // 2. Masterpiece Logic
-            if (mainCat === 'street_editorial_vintage') {
-                processedSubject += ", high-angle shot from balcony looking down, full body visible with wide negative space. Subject positioned slightly left of center, relaxed and confident expression looking up at camera, left hand holding white takeaway coffee cup, right hand making Metal/Rock On sign. Outfit based on reference. Background: rough grey asphalt with tire marks and dust, partial view of Silver Carry 1.5 Real Van on right edge, soft tree branch shadows on ground. Lighting: warm late-afternoon golden hour from top-left, crisp highlights on clothes and car. Shot on Canon AE-1, analog vintage feel, editorial street style, slight desaturation, subtle film grain, realistic texture";
-            } else if (mainCat === 'poetic_cinema_alley') {
-                processedSubject += ", turning toward camera with calm yet intense gaze. Lighting: strong sunlight hitting front body creating high contrast. Background: alley flanked by tall concrete walls, older uneven cement wall, posters. Overhead: dense green leaves with small red rose apples. Aesthetic: film photography feel, fine grain, dramatic contrast, poetic cinematic mood.";
-            } else if (mainCat && subCatVal && subCategories[mainCat]) {
-                const sub = subCategories[mainCat].find(s => s.val === subCatVal);
-                if (sub) processedSubject += sub.prompt;
-            }
-
-            // Append Pose & Outfit (if not Masterpiece)
-            if (!['street_editorial_vintage', 'poetic_cinema_alley'].includes(mainCat)) {
-                 if (poseVal) processedSubject += `, ${poseVal}`;
-                 if (outfit) processedSubject += `, wearing ${outfit}`;
-            }
-
-            if (processedSubject) promptSegments.push(processedSubject);
-
-            // 3. Environment & Style
-            if (!['street_editorial_vintage', 'poetic_cinema_alley'].includes(mainCat)) {
-                if (background === 'auto') {
-                    promptSegments.push(getAutoBackground(style, subject));
-                } else if (background) {
-                    promptSegments.push(`${background} background`);
-                }
-                
-                if (style) promptSegments.push(`${style} style`);
-                if (lighting) promptSegments.push(lighting);
-                if (lens) promptSegments.push(lens);
-            }
-
-            // 4. Target Audience
-            if (targetAudience) {
-                if (targetAudience === 'gen_z') promptSegments.push("trendy aesthetic, vibrant");
-                if (targetAudience === 'luxury') promptSegments.push("luxurious, elegant");
-                if (targetAudience === 'corporate') promptSegments.push("professional, clean");
-            }
-
-            // Detail Level Logic
-            if (detailLevel === 'long') {
-                promptSegments.push("hyper-detailed, intricate details, highly textured, sharp focus, ray tracing, global illumination, unreal engine 5 render, octane render, vivid colors, atmospheric lighting, depth of field");
-                if (style) promptSegments.push(`${style} masterpiece, trending on artstation, award winning`);
-            } else if (detailLevel === 'medium') {
-                promptSegments.push("masterpiece, 8k, best quality");
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                document.getElementById('db-status').innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500"></span> Online (Cloud)';
+                const colRef = collection(db, 'artifacts', appId, 'users', user.uid, 'prompts');
+                onSnapshot(colRef, (snapshot) => {
+                    localLibrary = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    localLibrary.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                    window.renderLibrary();
+                }, (error) => console.error("Snapshot error:", error));
             } else {
-                 promptSegments.push("high quality");
+                document.getElementById('db-status').innerHTML = 'Offline';
             }
-
-            let finalPrompt = promptSegments.join(", ");
-            let params = "";
-
-            if (model === 'midjourney') {
-                params = ` --ar ${ar} --v 6.0 --s ${stylize} --c ${chaos}`;
-                if (seed) params += ` --seed ${seed}`;
-                if (negative) params += ` --no ${negative}`;
-                finalPrompt += `<span class="text-indigo-500 font-bold">${params}</span>`;
-            } else if (model === 'gemini') {
-                // Gemini Logic
-                let arText = "";
-                if(ar === '16:9') arText = " in wide 16:9 aspect ratio";
-                else if(ar === '9:16') arText = " in vertical 9:16 aspect ratio";
-                else if(ar === '4:5') arText = " in portrait 4:5 aspect ratio";
-                
-                finalPrompt += arText;
-                if (negative) finalPrompt += `. Ensure the image does not contain: ${negative}`;
-            } else {
-                if (negative) finalPrompt += `\nNegative: ${negative}`;
-            }
-
-            const outEl = document.getElementById('output-text');
-            if(outEl) outEl.innerHTML = finalPrompt || "(Menunggu titah Baginda...)";
-            document.getElementById('token-count').innerText = Math.floor(finalPrompt.length / 4) + " Tokens";
-
-            // Charts
-            if(radarChart && document.getElementById('content-analytics') && !document.getElementById('content-analytics').classList.contains('hidden')) {
-                 radarChart.data.datasets[0].data = [promptSegments.length, 5, 5, 5, 5];
-                 radarChart.update();
-            }
-        };
-
-        window.saveToHistory = async function() {
-            const text = document.getElementById('output-text')?.innerText;
-            const subj = document.getElementById('subject')?.value || "Untitled";
-            const cat = document.getElementById('quality-preset')?.value || "Manual";
-            
-            if(window.saveToCloud) {
-                const cloudSuccess = await window.saveToCloud(text, subj, cat);
-                if(cloudSuccess) return; 
-            }
-
-            const item = { prompt: text, subject: subj, categoryLabel: cat, timestamp: new Date().toLocaleTimeString() };
-            let h = JSON.parse(localStorage.getItem('imp_history') || '[]');
-            h.unshift(item);
-            localStorage.setItem('imp_history', JSON.stringify(h));
-            window.loadHistory();
-            window.showToast("Disimpan");
-        };
-
-        window.loadHistory = function() {
-             const list = document.getElementById('history-list');
-             const filterEl = document.getElementById('history-filter');
-             if(!list) return;
-             
-             const h = JSON.parse(localStorage.getItem('imp_history') || '[]');
-             const filter = filterEl ? filterEl.value : 'all';
-             
-             list.innerHTML = '';
-             
-             const filtered = filter === 'all' ? h : h.filter(item => item.categoryLabel === filter);
-
-             if(filtered.length === 0) {
-                 list.innerHTML = '<div class="text-center text-[10px] text-slate-400 py-4">Kosong</div>';
-                 return;
-             }
-
-             filtered.forEach(item => {
-                 const div = document.createElement('div');
-                 div.className = "p-2 bg-slate-100 dark:bg-slate-700/50 rounded mb-2 text-xs cursor-pointer hover:bg-indigo-50 dark:hover:bg-slate-700 transition-colors";
-                 div.innerHTML = `<div class="font-bold text-[10px] text-slate-500">${item.timestamp}</div><div class="truncate text-slate-700 dark:text-slate-200">${item.subject}</div>`;
-                 div.onclick = () => {
-                     const sub = document.getElementById('subject');
-                     if(sub) {
-                         sub.value = item.prompt;
-                         window.updateOutput();
-                     }
-                 };
-                 list.appendChild(div);
-             });
-        };
-        
-        window.updateHistoryFilters = function() {
-            const history = JSON.parse(localStorage.getItem('imp_history') || '[]');
-            const uniqueCategories = new Set();
-            history.forEach(item => {
-                if(item.categoryLabel) uniqueCategories.add(item.categoryLabel);
-            });
-            const filterEl = document.getElementById('history-filter');
-            if(filterEl) {
-                const currentVal = filterEl.value;
-                filterEl.innerHTML = '<option value="all">Semua</option>';
-                uniqueCategories.forEach(cat => {
-                    const option = document.createElement('option');
-                    option.value = cat;
-                    option.textContent = cat;
-                    filterEl.appendChild(option);
-                });
-                 if ([...filterEl.options].some(o => o.value === currentVal)) {
-                    filterEl.value = currentVal;
-                }
-            }
-        };
-
-        window.switchTab = function(t) {
-            ['core','visual','tech','analytics','guide'].forEach(x => {
-                document.getElementById('content-'+x)?.classList.add('hidden');
-                document.getElementById('tab-'+x)?.classList.remove('active', 'bg-indigo-50', 'text-indigo-600');
-            });
-            document.getElementById('content-'+t)?.classList.remove('hidden');
-            document.getElementById('tab-'+t)?.classList.add('active', 'bg-indigo-50', 'text-indigo-600');
-            
-            if(t === 'analytics' && !radarChart) initCharts();
-        };
-        
-        window.applyQualityPreset = function() {
-             const val = document.getElementById('quality-preset').value;
-             const sub = document.getElementById('sub-category');
-             const subCont = document.getElementById('sub-category-container');
-             
-             // Auto set AR for wallpapers
-             const arRadios = document.getElementsByName('ar');
-             if (val === 'wallpaper_desktop') {
-                 document.querySelector('input[name="ar"][value="16:9"]').checked = true;
-             } else if (val === 'wallpaper_mobile') {
-                 document.querySelector('input[name="ar"][value="9:16"]').checked = true;
-             } else if (val === 'wallpaper_ultrawide') {
-                 // Fallback 16:9 if 21:9 visual hidden
-                 document.querySelector('input[name="ar"][value="16:9"]').checked = true;
-             }
-
-             sub.innerHTML = '<option value="">-- Pilih --</option>';
-             if(subCategories[val]) {
-                 subCont.classList.remove('opacity-50', 'pointer-events-none');
-                 subCategories[val].forEach(x => {
-                     const op = document.createElement('option');
-                     op.value = x.val;
-                     op.textContent = x.label;
-                     sub.appendChild(op);
-                 });
-             } else {
-                 subCont.classList.add('opacity-50', 'pointer-events-none');
-             }
-             window.updateOutput();
-        };
-        
-        window.fillNegativeDefaults = function() {
-            const neg = document.getElementById('negative');
-            if(neg) { neg.value = "ugly, bad quality"; window.updateOutput(); }
-        };
-        
-        window.copyToClipboard = function() {
-             const t = document.getElementById('output-text');
-             if(t) {
-                 const ta = document.createElement('textarea');
-                 ta.value = t.innerText;
-                 document.body.appendChild(ta);
-                 ta.select();
-                 document.execCommand('copy');
-                 document.body.removeChild(ta);
-                 window.showToast("Disalin ke Clipboard");
-             }
-        };
-
-        window.showToast = function(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-msg').textContent = msg;
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 2500);
-        }
-        
-        window.fullReset = function() {
-             if(confirm("Reset?")) location.reload();
-        };
-
-        function initCharts() {
-            const cvs = document.getElementById('radarChart');
-            if(cvs) {
-                radarChart = new Chart(cvs, {
-                    type: 'radar',
-                    data: { labels: ['Subject','Style','Tech','Light','Creative'], datasets: [{ label: 'Balance', data:[5,5,5,5,5], backgroundColor: 'rgba(99,102,241,0.2)', borderColor: '#6366f1' }] },
-                    options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { r: { suggestedMin: 0, suggestedMax: 10 } } }
-                });
-            }
-            const bar = document.getElementById('barChart');
-            if(bar) {
-                new Chart(bar, { type: 'bar', data: { labels: ['Tokens'], datasets: [{ data:[10], backgroundColor: '#6366f1' }] }, options: { maintainAspectRatio: false, plugins: { legend: { display: false } } } });
-            }
-        }
-
-        // Main Init Function
-        window.init = function() {
-            // Restore theme
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'light') {
-                document.documentElement.classList.remove('dark');
-                const icon = document.getElementById('theme-icon');
-                if(icon) icon.className = "fa-solid fa-sun text-yellow-500";
-            }
-
-            // POPULATE DOM ELEMENTS SAFELY
-            els = {
-                subject: document.getElementById('subject'),
-                gender: document.getElementById('gender'),
-                age: document.getElementById('age'),
-                targetAudience: document.getElementById('target-audience'),
-                negative: document.getElementById('negative'),
-                style: document.getElementById('style'),
-                lighting: document.getElementById('lighting'),
-                colors: document.getElementById('colors'),
-                material: document.getElementById('material'),
-                background: document.getElementById('background'),
-                qualityPreset: document.getElementById('quality-preset'),
-                subCategory: document.getElementById('sub-category'),
-                subCategoryContainer: document.getElementById('sub-category-container'),
-                view: document.getElementById('view-preset'),
-                pose: document.getElementById('pose'),
-                outfit: document.getElementById('outfit'),
-                lens: document.getElementById('lens'),
-                stylize: document.getElementById('stylize'),
-                chaos: document.getElementById('chaos'),
-                seed: document.getElementById('seed'),
-                output: document.getElementById('output-text'),
-                history: document.getElementById('history-list'),
-                historyFilter: document.getElementById('history-filter'),
-                moodChips: document.getElementById('mood-chips'),
-                radarCanvas: document.getElementById('radarChart'),
-                barCanvas: document.getElementById('barChart')
-            };
-
-            // Init Moods
-            window.renderMoods();
-            
-            // Init History
-            window.updateHistoryFilters();
-            window.loadHistory();
-
-            // Event Listeners with DEBOUNCE
-            const debouncedUpdate = debounce(window.updateOutput, 300);
-
-            // Text Inputs (Typing) -> Debounce
-            if(els.subject) els.subject.addEventListener('input', debouncedUpdate);
-            if(els.negative) els.negative.addEventListener('input', debouncedUpdate);
-
-            // Selects/Radios (Clicking) -> Immediate
-            const selects = document.querySelectorAll('select');
-            selects.forEach(s => s.addEventListener('change', window.updateOutput));
-
-            const radios = document.querySelectorAll('input[type="radio"], input[type="range"]');
-            radios.forEach(r => r.addEventListener('input', window.updateOutput));
-
-            window.updateOutput();
-        }
-
-        // Boot
-        window.addEventListener('DOMContentLoaded', () => {
-            window.init();
         });
 
+        window.saveToHistory = async function() {
+            if (!currentUser) return showToast("Menunggu koneksi cloud...", 'error');
+            const promptText = document.getElementById('result').value;
+            if (!promptText) return showToast("Prompt masih kosong!", 'error');
+            const btnSave = document.getElementById('btn-save');
+            if(btnSave) { btnSave.disabled = true; btnSave.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; }
+            try {
+                await addDoc(collection(db, 'artifacts', appId, 'users', currentUser.uid, 'prompts'), {
+                    text: promptText, date: new Date().toLocaleString('id-ID'), timestamp: Date.now(), mode: window.currentMode
+                });
+                showToast("Tersimpan di Cloud! ☁️");
+            } catch (e) { console.error(e); showToast("Gagal menyimpan.", 'error'); } 
+            finally { if(btnSave) { btnSave.disabled = false; btnSave.innerHTML = '<i class="fas fa-cloud-upload-alt"></i>'; } }
+        }
+
+        window.deleteLibItem = async function(id) {
+            if(!confirm("Hapus mantra ini?")) return;
+            try { await deleteDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'prompts', id)); showToast("Terhapus!"); } catch(e) { console.error(e); showToast("Gagal menghapus.", 'error'); }
+        }
+        window.getLibraryData = () => localLibrary;
+    </script>
+
+    <!-- UI LOGIC SCRIPT -->
+    <script>
+        window.currentMode = 'general';
+        const sportActions = {
+            "Football/Futsal": [{val:"Volley kick", txt:"Volley Kick"}, {val:"Bicycle kick", txt:"Salto"}, {val:"Goalkeeper diving save", txt:"Kiper Save"}, {val:"Sliding tackle", txt:"Sliding"}, {val:"Dribbling", txt:"Dribbling"}, {val:"Header duel", txt:"Header"}, {val:"Penalty kick", txt:"Penalty"}, {val:"Pivot control", txt:"Pivot"}, {val:"Goal celebration", txt:"Selebrasi"}, {val:"Coach instruction", txt:"Coach"}],
+            "Basketball": [{val:"Slam dunk", txt:"Slam Dunk"}, {val:"3-point shot", txt:"3-Point"}, {val:"Crossover", txt:"Crossover"}, {val:"Layup", txt:"Layup"}, {val:"Block", txt:"Block"}, {val:"Jump ball", txt:"Jump Ball"}],
+            "Badminton": [{val:"Jumping smash", txt:"Smash"}, {val:"Netting", txt:"Netting"}, {val:"Backhand drive", txt:"Backhand"}, {val:"Service", txt:"Service"}, {val:"Diving save", txt:"Diving"}],
+            "Volleyball": [{val:"Spike", txt:"Spike"}, {val:"Block", txt:"Block"}, {val:"Dig", txt:"Dig"}, {val:"Jump serve", txt:"Jump Serve"}, {val:"Setting", txt:"Setting"}],
+            "Tennis": [{val:"Serve", txt:"Serve"}, {val:"Forehand smash", txt:"Forehand"}, {val:"Backhand slice", txt:"Backhand"}, {val:"Volley", txt:"Volley"}],
+            "Swimming": [{val:"Butterfly stroke", txt:"Butterfly"}, {val:"Diving start", txt:"Start"}, {val:"Freestyle", txt:"Freestyle"}, {val:"Backstroke", txt:"Backstroke"}],
+            "Martial Arts": [{val:"High kick", txt:"High Kick"}, {val:"Grappling", txt:"Grappling"}, {val:"Punch impact", txt:"Punch"}, {val:"Flying knee", txt:"Flying Knee"}],
+            "Cycling": [{val:"Sprinting finish", txt:"Sprint Finish"}, {val:"Climbing", txt:"Climbing"}, {val:"Cornering", txt:"Cornering"}],
+            "Running": [{val:"Sprint start", txt:"Sprint Start"}, {val:"Marathon finish", txt:"Marathon"}, {val:"Hurdles jump", txt:"Hurdles"}],
+            "Gym/Fitness": [{val:"Deadlift", txt:"Deadlift"}, {val:"Squat", txt:"Squat"}, {val:"Bench press", txt:"Bench Press"}, {val:"Flexing", txt:"Flexing"}, {val:"Running treadmill", txt:"Treadmill"}],
+            "MotoGP/Racing": [{val:"Cornering knee down", txt:"Cornering"}, {val:"Wheelie", txt:"Wheelie"}, {val:"Overtaking", txt:"Overtaking"}, {val:"Pit stop", txt:"Pit Stop"}]
+        };
+
+        window.toggleOther = function(selectEl) {
+            const otherInput = document.getElementById(selectEl.id + '-other');
+            if (otherInput) {
+                if (selectEl.value === 'other') { otherInput.classList.remove('hidden'); otherInput.focus(); } else { otherInput.classList.add('hidden'); }
+            }
+        }
+
+        function getFieldVal(id) {
+            const el = document.getElementById(id);
+            if (!el) return "";
+            if (el.tagName === 'SELECT' && el.value === 'other') {
+                const otherEl = document.getElementById(id + '-other');
+                return otherEl ? otherEl.value : "";
+            }
+            return el.value;
+        }
+
+        window.updateSportActions = function() {
+            const type = document.getElementById('sports-type').value;
+            const actionSelect = document.getElementById('sports-action');
+            actionSelect.innerHTML = ""; 
+            const actions = sportActions[type] || [{val:"Action shot", txt:"Action Shot"}];
+            actions.forEach(act => {
+                const option = document.createElement('option');
+                option.value = act.val;
+                option.text = act.txt;
+                actionSelect.appendChild(option);
+            });
+            const otherOpt = document.createElement('option');
+            otherOpt.value = "other";
+            otherOpt.text = "Other ✏️";
+            otherOpt.className = "text-yellow-400 font-bold";
+            actionSelect.appendChild(otherOpt);
+            document.getElementById('sports-action-other').classList.add('hidden');
+        }
+
+        window.onload = function() { window.updateSportActions(); window.renderLibrary(); };
+
+        window.switchMode = function(mode) {
+            window.currentMode = mode;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = 'tab-btn w-full text-left px-3 py-2 rounded-r-lg text-gray-400 flex items-center gap-3 text-xs hover:bg-white/5 border-l-transparent';
+            });
+
+            if (mode === 'library') {
+                document.getElementById('tab-library').className = 'tab-btn w-full text-left px-3 py-3 rounded-r-lg text-library mb-4 border-l-library bg-yellow-500/20 flex items-center gap-3 text-sm font-bold shadow-sm';
+                document.getElementById('generator-container').classList.add('hidden');
+                document.getElementById('footer-actions').classList.add('hidden');
+                document.getElementById('view-library').classList.remove('hidden');
+                window.renderLibrary();
+                return;
+            } else {
+                document.getElementById('tab-library').className = 'tab-btn w-full text-left px-3 py-3 rounded-r-lg text-library mb-4 border-l-library bg-yellow-500/10 hover:bg-yellow-500/20 flex items-center gap-3 text-sm font-bold shadow-sm';
+            }
+
+            const activeBtn = document.getElementById(`tab-${mode}`);
+            if(activeBtn) {
+                const colors = { general:'text-primary border-l-primary', product:'text-secondary border-l-secondary', landscape:'text-accent border-l-accent', landmark:'text-landmark border-l-landmark', people:'text-people border-l-people', sports:'text-sports border-l-sports', logo:'text-logo border-l-logo', texture:'text-texture border-l-texture', interior:'text-interior border-l-interior', fantasy:'text-fantasy border-l-fantasy', fnb: 'text-fnb border-l-fnb'};
+                const colorClass = colors[mode] || 'text-white border-l-white';
+                activeBtn.className = `tab-btn w-full text-left px-3 py-2 rounded-r-lg tab-active flex items-center gap-3 text-xs ${colorClass} bg-white/10`;
+            }
+
+            document.getElementById('view-library').classList.add('hidden');
+            document.getElementById('generator-container').classList.remove('hidden');
+            document.getElementById('footer-actions').classList.remove('hidden');
+            
+            document.querySelectorAll('.form-content').forEach(el => el.classList.add('hidden'));
+            const activeForm = document.getElementById(`form-${mode}`);
+            if(activeForm) activeForm.classList.remove('hidden');
+            
+            if(mode === 'sports') window.updateSportActions();
+        }
+
+        window.generatePrompt = function() {
+            const ratio = document.getElementById('ratio').value;
+            const negative = document.getElementById('negative').value;
+            let parts = [];
+            let quality = "";
+            const mode = window.currentMode;
+
+            // --- FNB LOGIC ---
+            if (mode === 'fnb') {
+                const subj = document.getElementById('fnb-subject').value; if(!subj) return alert("Isi Nama Makanan!");
+                const cat = getFieldVal('fnb-category');
+                const style = getFieldVal('fnb-style');
+                const plating = getFieldVal('fnb-plating');
+                const angle = getFieldVal('fnb-angle');
+                let core = "";
+                if(angle) core += `${angle} of `;
+                if(plating) core += `${plating} `;
+                if(style) core += `${style} `;
+                core += subj;
+                if(cat) core += ` (${cat})`;
+                parts.push(core);
+                const light = getFieldVal('fnb-light'); if(light) parts.push(light);
+                const effect = getFieldVal('fnb-effect'); if(effect) parts.push(`featuring ${effect}`);
+                quality = "food photography, food porn, delicious, michelin star quality, 8k resolution, highly detailed texture, depth of field, professional color grading, appetizing, sharp focus";
+            }
+            else if (mode === 'general') {
+                const subj = document.getElementById('subject-gen').value; if(!subj) return alert("Isi Subjek!"); parts.push(subj);
+                const mood = getFieldVal('gen-mood'); if(mood) parts.push(mood); 
+                const comp = getFieldVal('gen-comp'); if(comp) parts.push(comp); 
+                const style = getFieldVal('style-gen'); if(style) parts.push(style);
+                const light = getFieldVal('lighting-gen'); if(light) parts.push(light);
+                quality = "masterpiece, best quality, highly detailed, expressive, artstation trending, unique concept, 8k resolution, professional composition";
+            } 
+            else if (mode === 'product') {
+                const name = document.getElementById('product-name').value; if(!name) return alert("Isi Nama Produk!");
+                const shot = getFieldVal('product-shot'); const display = getFieldVal('prod-display'); 
+                let core = ""; if(shot && display) core = `${shot} of ${display} ${name}`; else if(shot) core = `${shot} of ${name}`; else if(display) core = `${display} ${name}`; else core = `Product photography of ${name}`; parts.push(core);
+                const bg = document.getElementById('product-bg').value; if(bg) parts.push(`background is ${bg}`);
+                const props = getFieldVal('prod-props'); if(props) parts.push(`surrounded by ${props}`); 
+                const texture = getFieldVal('prod-texture'); if(texture) parts.push(`made of ${texture}`);
+                const light = getFieldVal('prod-light'); if(light) parts.push(light);
+                const vibe = getFieldVal('product-vibe'); if(vibe) parts.push(vibe);
+                quality = "commercial photography, advertising standard, 8k resolution, sharp focus on product, highly detailed texture, professional studio lighting, 100mm macro lens, depth of field, hyper-realistic";
+            }
+            else if (mode === 'people') {
+                const person = document.getElementById('people-subject').value; if(!person) return alert("Isi Deskripsi!");
+                const demo = getFieldVal('people-demo'); const frame = getFieldVal('people-frame');
+                let core = ""; if(frame && demo) core = `${frame} of ${demo}, ${person}`; else if(demo) core = `${demo}, ${person}`; else if(frame) core = `${frame} of ${person}`; else core = `Portrait of ${person}`; parts.push(core);
+                const pose = getFieldVal('people-pose'); if(pose) parts.push(pose);
+                const fashion = getFieldVal('people-fashion'); if(fashion) parts.push(`wearing ${fashion}`);
+                const skin = getFieldVal('people-skin'); if(skin) parts.push(`with ${skin}`);
+                const bg = getFieldVal('people-bg'); if(bg) parts.push(`background is ${bg}`);
+                const light = getFieldVal('people-light'); if(light) parts.push(light);
+                quality = "portrait photography, 85mm lens, f/1.8, realistic skin texture, sharp eyes focus, cinematic lighting, photorealistic, 8k resolution, raw photo style";
+            }
+            else if (mode === 'sports') {
+                const sportType = document.getElementById('sports-type').value; 
+                const sportDetail = document.getElementById('sports-subject').value; // Using new top input
+                const action = getFieldVal('sports-action'); 
+                
+                let core = `${action} of ${sportType} player`;
+                if(sportDetail) core += `, ${sportDetail}`;
+                parts.push(core);
+                
+                const context = getFieldVal('sports-context'); if(context) parts.push(context);
+                const field = getFieldVal('sports-field'); if(field) parts.push(`on ${field}`);
+                const cam = getFieldVal('sports-cam'); if(cam) parts.push(cam);
+                const vibe = getFieldVal('sports-vibe'); if(vibe) parts.push(vibe);
+                quality = "sports photography, high speed shutter, action packed, dynamic composition, 8k, dramatic lighting, high contrast";
+            }
+            else if (mode === 'landscape') {
+                const loc = document.getElementById('land-subject').value; if(!loc) return alert("Isi Lokasi!");
+                const comp = getFieldVal('land-comp'); let core = ""; if(comp) core = `${comp} of ${loc}`; else core = `Landscape of ${loc}`; parts.push(core);
+                const effect = getFieldVal('land-effect'); if(effect) parts.push(effect);
+                const time = getFieldVal('land-time'); if(time) parts.push(time);
+                const season = getFieldVal('land-season'); if(season) parts.push(season);
+                const water = getFieldVal('land-water'); if(water) parts.push(water);
+                quality = "National Geographic photography, breathtaking view, 8k resolution, hyper-realistic, highly detailed nature, cinematic lighting, vivid colors, award winning photography";
+            }
+            else if (mode === 'landmark') {
+                const mark = document.getElementById('mark-subject').value; if(!mark) return alert("Isi Bangunan!");
+                const view = getFieldVal('mark-view'); let core = ""; if(view) core = `${view} of ${mark}`; else core = `Architecture of ${mark}`; parts.push(core);
+                const env = getFieldVal('mark-env'); if(env) parts.push(env);
+                const light = getFieldVal('mark-light'); if(light) parts.push(light); 
+                const era = getFieldVal('mark-era'); if(era) parts.push(era);
+                const material = getFieldVal('mark-material'); if(material) parts.push(`made of ${material}`);
+                const condition = getFieldVal('mark-condition'); if(condition) parts.push(condition);
+                quality = "architectural photography, Architectural Digest style, epic scale, 8k resolution, detailed textures, sharp lines, professional architectural visualization, cinematic atmosphere";
+            }
+            else if (mode === 'logo') {
+                const subj = document.getElementById('logo-subject').value; if(!subj) return alert("Isi Objek!");
+                const style = getFieldVal('logo-style'); const bg = getFieldVal('logo-bg');
+                parts.push(`${style} of ${subj}`); parts.push(bg);
+                quality = "vector graphics, centered, high quality logo design, minimalist, professional design, clean lines, scalable vector graphics, adobe illustrator style, behance feature";
+            }
+            else if (mode === 'texture') {
+                const subj = document.getElementById('tex-subject').value;
+                const type = getFieldVal('tex-type'); const vibe = getFieldVal('tex-vibe');
+                let core = subj ? `${type} of ${subj}` : type; parts.push(core); parts.push(vibe);
+                quality = "seamless pattern, tileable, high resolution texture, flat 2d design, detailed pattern, 4k texture map, professional textile design";
+            }
+            else if (mode === 'interior') {
+                // New logic with int-subject
+                const room = getFieldVal('int-room'); 
+                const style = getFieldVal('int-style'); 
+                const material = getFieldVal('int-material'); 
+                const lighting = getFieldVal('int-lighting');
+                const desc = document.getElementById('int-subject').value;
+                
+                let core = `${style} ${room}`;
+                if(desc) core += `, ${desc}`;
+                parts.push(core);
+                
+                if(material) parts.push(`featuring ${material}`); if(lighting) parts.push(`with ${lighting}`);
+                quality = "interior design photography, architectural digest style, wide angle, 8k, highly detailed, professional staging, photorealistic render, corona render, warm lighting";
+            }
+            else if (mode === 'fantasy') {
+                const race = getFieldVal('rpg-race'); const type = getFieldVal('rpg-class'); const armor = getFieldVal('rpg-armor'); const setting = getFieldVal('rpg-setting'); 
+                const style = getFieldVal('rpg-style'); // Added style from v18
+                const desc = document.getElementById('rpg-subject').value;
+
+                let core = ""; 
+                if(style) core += `${style} concept art of `;
+                if(race) core += `${race} `; 
+                core += type; 
+                if(desc) core += `, ${desc}`;
+                if(armor) core += ` wearing ${armor}`; 
+                
+                parts.push(core); 
+                parts.push(`in ${setting}`);
+                
+                quality = "digital painting, fantasy art, dynamic lighting, highly detailed, 8k, epic composition, artstation trending, octane render, cinematic shading";
+            }
+
+            parts.push(quality);
+            let final = parts.join(", ") + ` ${ratio}`;
+            if(negative) final += ` --no ${negative}`;
+
+            document.getElementById('result').value = final;
+            window.showToast("Prompt Siap! ✨");
+        }
+
+        window.renderLibrary = function() {
+            const history = window.getLibraryData ? window.getLibraryData() : [];
+            const container = document.getElementById('library-list');
+            const emptyState = document.getElementById('library-empty');
+            const countLabel = document.getElementById('lib-count');
+            const filterVal = document.getElementById('lib-filter').value;
+            
+            if(!container) return; 
+
+            container.innerHTML = "";
+            const filteredHistory = filterVal === 'all' ? history : history.filter(item => item.mode === filterVal);
+            countLabel.innerText = `${filteredHistory.length} items`;
+
+            if (filteredHistory.length === 0) { emptyState.classList.remove('hidden'); return; }
+            emptyState.classList.add('hidden');
+
+            filteredHistory.forEach((item) => {
+                const div = document.createElement('div');
+                div.className = "library-card bg-gray-800 p-4 rounded-lg border border-gray-700 flex flex-col gap-2";
+                div.innerHTML = `<div class="flex justify-between items-center mb-1"><span class="text-[10px] uppercase font-bold px-2 py-1 rounded bg-gray-700 text-gray-300 border border-gray-600">${item.mode}</span><span class="text-[10px] text-gray-500">${item.date}</span></div><div class="bg-black/30 p-3 rounded text-sm font-mono text-gray-300 break-words leading-relaxed border border-white/5">${item.text}</div><div class="flex gap-2 mt-1 justify-end"><button onclick="copyLibText('${item.text.replace(/'/g, "\\'")}')" class="text-emerald-400 text-xs font-bold px-3 py-1 rounded bg-emerald-900/20 border border-emerald-900/50 hover:bg-emerald-900/40"><i class="fas fa-copy"></i> COPY</button><button onclick="deleteLibItem('${item.id}')" class="text-red-400 text-xs px-2 py-1 rounded hover:bg-red-900/20"><i class="fas fa-trash"></i></button></div>`;
+                container.appendChild(div);
+            });
+        }
+
+        window.copyToClipboard = function() { const copyText = document.getElementById("result"); if(!copyText.value) return; copyText.select(); navigator.clipboard.writeText(copyText.value).then(() => window.showToast("Tersalin!")); }
+        window.copyLibText = function(text) { navigator.clipboard.writeText(text).then(() => window.showToast("Disalin dari Cloud!")); }
+        window.showToast = function(message, type = 'success') { const container = document.getElementById('toast-container'); const toast = document.createElement('div'); const color = type === 'error' ? 'border-red-500 text-red-100' : 'border-emerald-500 text-white'; toast.className = `bg-gray-800 border-l-4 ${color} px-6 py-3 rounded shadow-xl flex items-center gap-3 toast-enter`; toast.innerHTML = `<span>${message}</span>`; container.appendChild(toast); setTimeout(() => toast.remove(), 3000); }
+        window.exportLibrary = function() {
+            const history = window.getLibraryData ? window.getLibraryData() : [];
+            if(history.length === 0) return window.showToast("Library kosong!", 'error');
+            const filterVal = document.getElementById('lib-filter').value;
+            const filteredHistory = filterVal === 'all' ? history : history.filter(item => item.mode === filterVal);
+            if(filteredHistory.length === 0) return window.showToast("Tidak ada item di kategori ini.");
+            let content = `PROMPT LIBRARY EXPORT - ${new Date().toLocaleString()}\nFilter: ${filterVal.toUpperCase()}\nTotal: ${filteredHistory.length}\n====================================\n\n`;
+            filteredHistory.forEach((item, i) => { content += `[${i+1}] MODE: ${item.mode.toUpperCase()} | DATE: ${item.date}\n${item.text}\n------------------------------------\n\n`; });
+            const blob = new Blob([content], { type: 'text/plain' });
+            const anchor = document.createElement('a');
+            anchor.download = `Prompt_Library_${filterVal}_${Date.now()}.txt`;
+            anchor.href = window.URL.createObjectURL(blob);
+            anchor.click();
+        }
     </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniGen AI Pro - Studio Kreatif Baginda</title>
+    <title>IMAGEN PRO by Dezan Hadiansyah</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -79,21 +79,27 @@
                 <i data-lucide="image" class="w-6 h-6"></i>
             </button>
         </div>
+        <div class="mt-auto pb-4">
+            <button onclick="openSettings()" class="p-3 rounded-xl text-slate-500 hover:text-white transition-colors" title="Pengaturan API Key">
+                <i data-lucide="settings" class="w-6 h-6"></i>
+            </button>
+        </div>
     </nav>
 
     <!-- Mobile Top Nav -->
     <nav class="md:hidden fixed top-0 w-full glass p-4 flex justify-between items-center z-50">
-        <h1 class="text-xl font-bold gradient-text">OmniGen Pro</h1>
-        <div class="flex space-x-4">
+        <h1 class="text-xl font-bold gradient-text">IMAGEN PRO</h1>
+        <div class="flex space-x-4 items-center">
             <button onclick="switchTab('generate')"><i data-lucide="plus-square" class="w-6 h-6"></i></button>
             <button onclick="switchTab('editor')"><i data-lucide="edit-3" class="w-6 h-6"></i></button>
             <button onclick="switchTab('gallery')"><i data-lucide="image" class="w-6 h-6"></i></button>
+            <button onclick="openSettings()"><i data-lucide="settings" class="w-6 h-6 text-slate-400"></i></button>
         </div>
     </nav>
 
     <main class="md:ml-20 p-4 md:p-8 pt-20 md:pt-8 min-h-screen">
         
-        <!-- Tab: Generator (Existing) -->
+        <!-- Tab: Generator -->
         <section id="tab-generate" class="max-w-6xl mx-auto">
             <header class="mb-8">
                 <h2 class="text-3xl font-bold mb-2">Singgasana Kreatif Baginda</h2>
@@ -102,10 +108,9 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-5 space-y-6">
-                    <!-- Control Panel (Sama seperti sebelumnya) -->
                     <div class="glass p-6 rounded-2xl space-y-4 relative overflow-hidden">
                          <div class="absolute top-0 right-0 bg-gradient-to-l from-indigo-600 to-transparent pl-6 pr-4 py-1 text-[10px] font-bold text-white tracking-widest">
-                            IMAGEN 4.0 PRO
+                            IMAGEN PRO
                         </div>
 
                         <label class="block font-medium mb-2">Kategori</label>
@@ -116,6 +121,7 @@
                             <button onclick="setCategory('Landscape')" data-category="Landscape" class="cat-btn border border-slate-700 p-2 rounded-lg text-xs bg-slate-800 text-slate-400 hover:bg-slate-700 transition-all">Alam</button>
                             <button onclick="setCategory('Vehicle')" data-category="Vehicle" class="cat-btn border border-slate-700 p-2 rounded-lg text-xs bg-slate-800 text-slate-400 hover:bg-slate-700 transition-all">Kendaraan</button>
                             <button onclick="setCategory('Architecture')" data-category="Architecture" class="cat-btn border border-slate-700 p-2 rounded-lg text-xs bg-slate-800 text-slate-400 hover:bg-slate-700 transition-all">Bangunan</button>
+                            <button onclick="setCategory('General')" data-category="General" class="cat-btn border border-slate-700 p-2 rounded-lg text-xs bg-slate-800 text-slate-400 hover:bg-slate-700 transition-all col-span-3 font-semibold tracking-wide border-dashed hover:border-indigo-400 hover:text-indigo-300">Lainnya (Bebas)</button>
                         </div>
 
                         <div class="relative">
@@ -143,7 +149,6 @@
                                 placeholder="Contoh: Blur, distorsi..."></textarea>
                         </div>
 
-                        <!-- Dropdowns -->
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs text-slate-400 mb-2">Latar Belakang</label>
@@ -225,7 +230,7 @@
                     </div>
                 </div>
 
-                <!-- Preview Area (Generator) -->
+                <!-- Preview Area -->
                 <div class="lg:col-span-7">
                     <div id="previewContainer" class="glass rounded-3xl overflow-hidden min-h-[500px] flex flex-col items-center justify-center relative border-dashed border-2 border-slate-700 transition-all duration-500">
                         <div id="emptyState" class="text-center p-8">
@@ -257,7 +262,7 @@
             </div>
         </section>
 
-        <!-- Tab: Magic Editor (UPDATED) -->
+        <!-- Tab: Magic Editor -->
         <section id="tab-editor" class="hidden max-w-6xl mx-auto">
             <header class="mb-8">
                 <h2 class="text-3xl font-bold mb-2">Magic Editor & Kombinasi Produk</h2>
@@ -265,15 +270,12 @@
             </header>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- Left: Tools Area -->
                 <div class="space-y-6">
-                    <!-- Tool 1: Product Analyzer -->
                     <div class="glass p-6 rounded-2xl border-l-4 border-emerald-500">
                         <h3 class="text-sm font-bold text-emerald-400 mb-3 flex items-center">
                             <i data-lucide="scan-line" class="w-4 h-4 mr-2"></i> Langkah 1: Analisa Produk
                         </h3>
                         <p class="text-xs text-slate-400 mb-4">Upload foto produk (baju, tas, dll) untuk mendapatkan deskripsi teknisnya.</p>
-                        
                         <div class="flex space-x-3 items-center">
                             <label class="cursor-pointer bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-lg text-xs transition-all border border-slate-600">
                                 <i data-lucide="upload" class="w-3 h-3 inline mr-1"></i> Upload Produk
@@ -281,7 +283,6 @@
                             </label>
                             <span id="productName" class="text-xs text-slate-500 italic truncate max-w-[150px]">Belum ada file</span>
                         </div>
-
                         <div id="productAnalysisResult" class="hidden mt-4">
                             <div class="bg-black/30 p-3 rounded-lg border border-emerald-500/30">
                                 <p id="productDescriptionText" class="text-xs text-emerald-100 font-mono leading-relaxed line-clamp-3">Menganalisa...</p>
@@ -292,12 +293,10 @@
                         </div>
                     </div>
 
-                    <!-- Tool 2: Editor Prompt -->
                     <div class="glass p-6 rounded-2xl">
                         <h3 class="text-sm font-bold text-indigo-400 mb-3 flex items-center">
                             <i data-lucide="edit" class="w-4 h-4 mr-2"></i> Langkah 2: Edit Foto Model
                         </h3>
-                        
                         <label class="block w-full h-40 border-2 border-dashed border-slate-600 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-indigo-500 hover:bg-slate-800/50 transition-all relative overflow-hidden mb-4" id="dropZone">
                             <input type="file" id="imageUpload" accept="image/*" onchange="handleImageUpload(event)">
                             <img id="uploadedPreview" class="hidden w-full h-full object-contain absolute inset-0 z-10 bg-black/50">
@@ -307,13 +306,11 @@
                                 <p class="text-xs text-slate-500 mt-2">Maksimal 10MB (JPG/PNG)</p>
                             </div>
                         </label>
-
                         <div class="space-y-4">
                             <label class="block font-medium mb-2 text-xs">Instruksi Edit (Paste Deskripsi Produk Di Sini)</label>
                             <textarea id="editPromptInput" rows="3" 
                                 class="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-4 text-xs focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
                                 placeholder="Contoh: Ubah baju model menjadi [Tempel Deskripsi Produk]..."></textarea>
-                            
                             <button onclick="executeEdit()" id="editBtn" disabled class="w-full bg-slate-700 text-slate-400 font-bold py-3 rounded-xl flex items-center justify-center space-x-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm">
                                 <i data-lucide="wand-2" class="w-4 h-4"></i>
                                 <span>Lakukan Perubahan</span>
@@ -322,7 +319,6 @@
                     </div>
                 </div>
 
-                <!-- Right: Result Area -->
                 <div class="glass p-6 rounded-2xl flex items-center justify-center min-h-[500px] relative">
                     <div id="editEmptyState" class="text-center">
                         <i data-lucide="image-plus" class="w-12 h-12 text-slate-600 mx-auto mb-4"></i>
@@ -333,8 +329,6 @@
                         <p class="text-indigo-400 animate-pulse">Sedang melukis ulang produk...</p>
                     </div>
                     <img id="editResultImage" class="hidden w-full h-full object-contain rounded-xl shadow-lg border border-slate-700">
-                    
-                    <!-- Buttons for Editor -->
                     <div class="absolute bottom-8 right-8 flex space-x-3">
                          <button onclick="saveEditToGallery()" id="saveEditBtn" class="hidden p-3 bg-white text-black rounded-full hover:scale-110 shadow-lg transition-all" title="Simpan Hasil Edit">
                             <i data-lucide="bookmark" class="w-6 h-6"></i>
@@ -359,6 +353,21 @@
         </section>
     </main>
 
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="fixed inset-0 bg-black/80 hidden z-[60] flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="glass p-8 rounded-2xl w-full max-w-md border border-slate-700">
+            <h3 class="text-xl font-bold mb-4 flex items-center">
+                <i data-lucide="key" class="w-6 h-6 mr-2 text-yellow-400"></i> Kunci API Rahasia
+            </h3>
+            <p class="text-sm text-slate-400 mb-4">API Key berhasil ditanamkan. Baginda dapat menggantinya jika diperlukan.</p>
+            <input type="password" id="apiKeyInput" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-sm mb-4 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Tempel API Key baru di sini...">
+            <div class="flex justify-end space-x-3">
+                <button onclick="closeSettings()" class="px-4 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800">Tutup</button>
+                <button onclick="saveSettings()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 font-bold">Simpan Baru</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Notification Toast -->
     <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 glass px-6 py-3 rounded-full opacity-0 translate-y-10 transition-all z-[100] flex items-center space-x-3 shadow-2xl pointer-events-none">
         <i id="toastIcon" data-lucide="info" class="w-5 h-5"></i>
@@ -370,10 +379,38 @@
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, doc, deleteDoc, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        const apiKey = "";
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'omnigen-pro-final-v11';
+        // --- API KEY MANAGEMENT ---
+        // Hardcoded API Key Baginda
+        let apiKey = "AIzaSyDcB8FpfwYzi1l0qKwumvBn3lxc6EqB9U0";
         
-        // Konfigurasi Firebase Baginda Raja
+        // Override jika ada di localStorage (opsional)
+        if(localStorage.getItem("gemini_api_key")) {
+            apiKey = localStorage.getItem("gemini_api_key");
+        }
+
+        window.openSettings = () => {
+            document.getElementById('apiKeyInput').value = apiKey;
+            document.getElementById('settingsModal').classList.remove('hidden');
+        };
+
+        window.closeSettings = () => {
+            document.getElementById('settingsModal').classList.add('hidden');
+        };
+
+        window.saveSettings = () => {
+            const val = document.getElementById('apiKeyInput').value.trim();
+            if(val) {
+                localStorage.setItem("gemini_api_key", val);
+                apiKey = val;
+                showToast("Kunci baru disimpan!", "key");
+                closeSettings();
+            } else {
+                showToast("Kunci tidak boleh kosong.", "alert-circle");
+            }
+        };
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'omnigen-pro-final-v13';
+        
         const firebaseConfig = {
             apiKey: "AIzaSyBVUDPpQaZ8GkfCZya0gT2k8GLnWJKun-A",
             authDomain: "promtai-cfb29.firebaseapp.com",
@@ -414,7 +451,6 @@
         const productDescriptionText = document.getElementById('productDescriptionText');
         const editPromptInput = document.getElementById('editPromptInput');
 
-        // --- GLOBAL DATA & CATEGORY LOGIC (Keep existing code) ---
         const cameraOptions = ["Biarkan AI Memilih", "Portrait Lens 85mm f/1.8", "Standard 50mm f/1.4", "Wide Angle 24mm", "Macro 100mm", "Telephoto 200mm", "Fisheye 16mm", "Cinematic Anamorphic", "Vintage Polaroid", "GoPro Action", "Drone Aerial View", "CCTV Grainy", "Sony A7R IV", "Leica M10", "Hasselblad Medium Format"];
         const atmosphereOptions = ["Biarkan AI Memilih", "Golden Hour", "Blue Hour", "Cinematic Teal & Orange", "Moody & Dark", "Bright & Airy", "Cyberpunk Neon", "Studio Lighting", "Rembrandt Lighting", "Soft Box", "Hard Flash", "Foggy/Misty", "Rainy Day", "Ethereal/Dreamy", "Volumetric God Rays", "Gothic Gloom"];
 
@@ -424,20 +460,18 @@
             'Food': { backgrounds: ['Biarkan AI Memilih', 'Meja Restoran', 'Piknik', 'Dapur', 'Moody Dark', 'Jendela Pagi'], poses: ['Biarkan AI Memilih', 'Flat Lay', '45 Derajat', 'Macro', 'Eye Level'], label: 'Sudut' },
             'Landscape': { backgrounds: ['Biarkan AI Memilih', 'Langit Biru', 'Sunset', 'Malam Bintang', 'Kabut'], poses: ['Biarkan AI Memilih', 'Wide Angle', 'Aerial', 'Eye Level', 'Reflection'], label: 'Komposisi' },
             'Vehicle': { backgrounds: ['Biarkan AI Memilih', 'Sirkuit', 'Tol Malam', 'Showroom', 'Gurun'], poses: ['Biarkan AI Memilih', 'Hero Shot', 'Samping', 'Belakang', 'Motion Blur'], label: 'Sudut' },
-            'Architecture': { backgrounds: ['Biarkan AI Memilih', 'Cerah', 'Hujan', 'Taman', 'Malam'], poses: ['Biarkan AI Memilih', 'Eye Level', 'Worm Eye', 'Bird Eye', 'Simetris'], label: 'Perspektif' }
+            'Architecture': { backgrounds: ['Biarkan AI Memilih', 'Cerah', 'Hujan', 'Taman', 'Malam'], poses: ['Biarkan AI Memilih', 'Eye Level', 'Worm Eye', 'Bird Eye', 'Simetris'], label: 'Perspektif' },
+            'General': { backgrounds: ['Biarkan AI Memilih', 'Studio', 'Outdoor', 'Fantasi', 'Abstrak', 'Warna Solid'], poses: ['Biarkan AI Memilih', 'Cinematic Angle', 'Eye Level', 'Low Angle', 'High Angle', 'Wide Shot'], label: 'Sudut/Komposisi' }
         };
 
         const initAuth = async () => {
             if (auth.currentUser) return auth.currentUser;
             try {
-                // Try custom token first (only works if config matches environment)
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     try {
                         const res = await signInWithCustomToken(auth, __initial_auth_token);
                         return res.user;
                     } catch (tokenError) {
-                        console.warn("Custom token mismatch, falling back to Anonymous:", tokenError);
-                        // Fallback to anonymous for user's custom firebase config
                         const res = await signInAnonymously(auth);
                         return res.user;
                     }
@@ -477,33 +511,24 @@
             });
         }
 
-        // --- RESET FUNCTION (NEW) ---
         window.resetGenerator = () => {
             document.getElementById('promptInput').value = '';
             document.getElementById('negativePromptInput').value = '';
-            
-            // Reset all dynamic dropdowns to index 0
             ['bgSelect', 'poseSelect', 'cameraSelect', 'atmosphereSelect', 'imageStyle', 'aspectRatio'].forEach(id => {
                 const el = document.getElementById(id);
                 if(el) el.selectedIndex = 0;
             });
-
-            // Hide blueprint
             document.getElementById('blueprintContainer').classList.add('hidden');
-            showToast("Prompt & Pengaturan di-reset.", "rotate-ccw");
+            showToast("Pengaturan di-reset.", "rotate-ccw");
         };
 
-        // --- PRODUCT ANALYZER LOGIC (NEW) ---
         window.handleProductUpload = (event) => {
             const file = event.target.files[0];
             if (!file) return;
-            // Increased limit for Product Upload as well
-            if (file.size > 10 * 1024 * 1024) {
-                showToast("Ukuran foto maksimal 10MB, Baginda.", "alert-triangle");
-                return;
-            }
+            if (file.size > 10 * 1024 * 1024) return showToast("Maksimal 10MB.", "alert-triangle");
+            
             productName.innerText = file.name;
-            showToast("Menganalisa produk...", "scan-line");
+            showToast("Menganalisa...", "scan-line");
             productAnalysisResult.classList.remove('hidden');
             
             const reader = new FileReader();
@@ -512,7 +537,6 @@
                 const mimeType = e.target.result.substring(e.target.result.indexOf(':') + 1, e.target.result.indexOf(';'));
                 
                 try {
-                    // Use Gemini Vision to describe the product
                     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -520,18 +544,17 @@
                             contents: [{
                                 role: "user",
                                 parts: [
-                                    { text: "Describe this product in very specific detail suitable for an image generation prompt. Focus on material, texture, color, cut, and distinctive features. Keep it one concise paragraph in English." },
+                                    { text: "Describe this product in very specific detail for image generation. Focus on material, texture, color, and cut. One paragraph English." },
                                     { inlineData: { mimeType: mimeType, data: base64Data } }
                                 ]
                             }]
                         })
                     });
                     const data = await response.json();
-                    const description = data.candidates[0].content.parts[0].text;
-                    productDescriptionText.innerText = description;
+                    productDescriptionText.innerText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Gagal analisa.";
                     showToast("Analisa selesai!", "check");
                 } catch (err) {
-                    productDescriptionText.innerText = "Gagal menganalisa produk.";
+                    productDescriptionText.innerText = "Gagal menganalisa. Cek API Key.";
                     showToast("Gagal analisa.", "x");
                 }
             };
@@ -542,18 +565,13 @@
             const text = productDescriptionText.innerText;
             const currentVal = editPromptInput.value;
             editPromptInput.value = currentVal ? `${currentVal} ${text}` : `Change the outfit to: ${text}`;
-            showToast("Deskripsi disalin ke Prompt!", "copy");
+            showToast("Disalin ke Prompt!", "copy");
         };
 
-        // --- EDITOR LOGIC ---
         window.handleImageUpload = (event) => {
             const file = event.target.files[0];
             if (!file) return;
-            // Updated Limit to 10MB
-            if (file.size > 10 * 1024 * 1024) {
-                showToast("Ukuran foto maksimal 10MB, Baginda.", "alert-triangle");
-                return;
-            }
+            if (file.size > 10 * 1024 * 1024) return showToast("Maksimal 10MB.", "alert-triangle");
 
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -598,7 +616,7 @@
                     })
                 });
 
-                if (!response.ok) throw new Error("Gagal mengedit.");
+                if (!response.ok) throw new Error("Gagal mengedit. Cek API Key.");
                 const data = await response.json();
                 const resultPart = data.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
                 if (!resultPart) throw new Error("No image returned.");
@@ -609,12 +627,10 @@
                 imgEl.classList.remove('hidden');
                 document.getElementById('dlEditBtn').classList.remove('hidden');
                 document.getElementById('saveEditBtn').classList.remove('hidden');
-                
                 showToast("Selesai!", "check");
-
             } catch (e) {
                 console.error(e);
-                showToast("Gagal mengedit.", "x");
+                showToast("Gagal: " + e.message, "x");
             } finally {
                 editBtn.disabled = false;
                 document.getElementById('editLoadingState').classList.add('hidden');
@@ -625,7 +641,7 @@
             if (!editImageBase64) return;
             const link = document.createElement('a');
             link.href = editImageBase64;
-            link.download = `OmniGen-Edit-${Date.now()}.png`;
+            link.download = `Imagen-Pro-Edit-${Date.now()}.png`;
             link.click();
         };
 
@@ -633,16 +649,16 @@
             if (!editImageBase64) return;
             showToast("Menyimpan...", "loader");
             try {
+                // Rule 1: Use private path
                 const compressed = await compressImage(editImageBase64);
                 const prompt = document.getElementById('editPromptInput').value.trim() || "Magic Edit";
-                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'images'), {
+                await addDoc(collection(db, 'artifacts', appId, 'users', user.uid, 'images'), {
                     userId: user.uid, image: compressed, prompt: `Edit: ${prompt}`, category: "Magic Edit", createdAt: Date.now()
                 });
                 showToast("Disimpan!", "check");
             } catch (e) { showToast("Gagal simpan.", "x"); }
         };
 
-        // --- EXISTING GENERATOR LOGIC ---
         function populateGlobalDropdowns() {
             cameraSelect.innerHTML = ''; cameraOptions.forEach(opt => cameraSelect.appendChild(new Option(opt, opt)));
             atmosphereSelect.innerHTML = ''; atmosphereOptions.forEach(opt => atmosphereSelect.appendChild(new Option(opt, opt)));
@@ -660,9 +676,15 @@
             currentCategory = cat;
             document.querySelectorAll('.cat-btn').forEach(btn => {
                 const isMatch = btn.dataset.category === cat;
-                btn.classList.toggle('bg-indigo-600', isMatch);
-                btn.classList.toggle('text-white', isMatch);
-                btn.classList.toggle('bg-slate-800', !isMatch);
+                if (isMatch) {
+                    btn.classList.remove('bg-slate-800', 'text-slate-400', 'border-slate-700', 'hover:bg-slate-700', 'border-dashed');
+                    btn.classList.add('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-500/20');
+                    if (cat === 'General') btn.classList.add('border-indigo-500'); 
+                } else {
+                    btn.classList.add('bg-slate-800', 'text-slate-400', 'border-slate-700', 'hover:bg-slate-700');
+                    btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-500/20');
+                    if (cat === 'General') btn.classList.add('border-dashed');
+                }
             });
             updateDropdowns(cat);
         };
@@ -685,7 +707,8 @@
             if(atmos !== 'Biarkan AI Memilih') extra += `, Atmosphere: ${atmos}`;
             if(neg) extra += `. Negative: ${neg}`;
 
-            finalGeneratedPrompt = `Masterpiece professional ${currentCategory}. Subject: ${prompt}${extra}. Style: ${style}. 8k resolution, ultra-detailed.`;
+            const categoryTerm = currentCategory === 'General' ? '' : `${currentCategory} `;
+            finalGeneratedPrompt = `Masterpiece professional ${categoryTerm}photography. Subject: ${prompt}${extra}. Style: ${style}. 8k resolution, ultra-detailed.`;
             finalPromptDisplay.innerText = finalGeneratedPrompt;
             document.getElementById('blueprintContainer').classList.remove('hidden');
 
@@ -696,7 +719,10 @@
                     body: JSON.stringify({ instances: [{ prompt: finalGeneratedPrompt }], parameters: { sampleCount: 1 } })
                 });
 
-                if (!response.ok) throw new Error('Gagal memproses gambar.');
+                if (!response.ok) {
+                    const err = await response.json();
+                    throw new Error(err.error?.message || 'Gagal memproses gambar.');
+                }
                 const data = await response.json();
                 if (!data.predictions) throw new Error("Safety Block.");
                 
@@ -706,13 +732,14 @@
                 showToast("Visual siap!", "check");
             } catch (e) {
                 setLoading(false);
-                showToast("Gagal membuat gambar.", "x");
+                showToast("Gagal: " + e.message, "x");
             }
         };
 
         window.enhancePrompt = async () => {
             const prompt = promptInput.value.trim();
             if (!prompt) return;
+            
             showToast("Mengaktifkan Logic V4...", "cpu");
             try {
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
@@ -726,12 +753,12 @@
             } catch (e) { showToast("Gagal enhance.", "x"); }
         };
 
-        // --- COMMON UTILS ---
         window.saveToGallery = async () => {
             if (!currentImageBase64) return;
             try {
                 const compressed = await compressImage(currentImageBase64);
-                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'images'), {
+                // Rule 1: Use private path
+                await addDoc(collection(db, 'artifacts', appId, 'users', user.uid, 'images'), {
                     userId: user.uid, image: compressed, prompt: finalGeneratedPrompt, category: currentCategory, createdAt: Date.now()
                 });
                 showToast("Tersimpan!", "check");
@@ -739,7 +766,8 @@
         };
 
         const setupGalleryListener = () => {
-            onSnapshot(query(collection(db, 'artifacts', appId, 'public', 'data', 'images')), (snap) => {
+            // Rule 1: Use private path
+            onSnapshot(query(collection(db, 'artifacts', appId, 'users', user.uid, 'images')), (snap) => {
                 galleryGrid.innerHTML = '';
                 document.getElementById('galleryCount').innerText = `${snap.size} Item`;
                 const items = []; snap.forEach(d => items.push({id: d.id, ...d.data()}));
@@ -748,7 +776,7 @@
                     const d = document.createElement('div');
                     d.className = "glass rounded-xl overflow-hidden aspect-square relative group";
                     d.innerHTML = `<img src="${item.image}" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"><button onclick="deleteDoc(doc(db, 'artifacts', '${appId}', 'public', 'data', 'images', '${item.id}'))" class="text-red-400 hover:text-red-300"><i data-lucide="trash-2"></i></button></div>
+                    <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"><button onclick="deleteDoc(doc(db, 'artifacts', '${appId}', 'users', '${user.uid}', 'images', '${item.id}'))" class="text-red-400 hover:text-red-300"><i data-lucide="trash-2"></i></button></div>
                     <div class="absolute bottom-0 left-0 w-full p-2 bg-gradient-to-t from-black/80 to-transparent text-[10px] text-white opacity-0 group-hover:opacity-100 transition-opacity">
                         <span class="font-bold uppercase text-indigo-300">${item.category}</span>
                     </div>`;
@@ -761,22 +789,16 @@
         window.switchTab = (tab) => {
             ['generate', 'editor', 'gallery'].forEach(t => document.getElementById(`tab-${t}`).classList.add('hidden'));
             document.getElementById(`tab-${tab}`).classList.remove('hidden');
-            
             ['generate', 'editor', 'gallery'].forEach(t => {
                 const btn = document.getElementById(`btn-${t}`);
-                if(t === tab) {
-                    btn.classList.add('bg-indigo-600', 'text-white');
-                    btn.classList.remove('text-slate-400');
-                } else {
-                    btn.classList.remove('bg-indigo-600', 'text-white');
-                    btn.classList.add('text-slate-400');
-                }
+                if(t === tab) { btn.classList.add('bg-indigo-600', 'text-white'); btn.classList.remove('text-slate-400'); } 
+                else { btn.classList.remove('bg-indigo-600', 'text-white'); btn.classList.add('text-slate-400'); }
             });
         };
 
         window.downloadImage = (isOriginal) => {
             if(!currentImageBase64) return;
-            const a = document.createElement('a'); a.href = currentImageBase64; a.download = 'OmniGen-Pro.png'; a.click();
+            const a = document.createElement('a'); a.href = currentImageBase64; a.download = 'Imagen-Pro.png'; a.click();
         };
         window.copyBlueprint = () => {
              const t = document.createElement('textarea'); t.value = finalPromptDisplay.innerText; document.body.appendChild(t); t.select(); document.execCommand('copy'); document.body.removeChild(t); showToast("Disalin!", "copy");
@@ -784,7 +806,6 @@
         function setLoading(l) { generateBtn.disabled = l; document.getElementById('loadingState').classList.toggle('hidden', !l); document.getElementById('emptyState').classList.toggle('hidden', l || !!currentImageBase64); document.getElementById('resultState').classList.toggle('hidden', l || !currentImageBase64); }
         window.showToast = (m,i) => { const t=document.getElementById('toast'); document.getElementById('toastMsg').innerText=m; document.getElementById('toastIcon').setAttribute('data-lucide', i); lucide.createIcons(); t.classList.remove('opacity-0', 'translate-y-10'); setTimeout(()=>t.classList.add('opacity-0', 'translate-y-10'), 3000); };
         
-        // Expose DB for inline deletes
         window.db = db; window.doc = doc; window.deleteDoc = deleteDoc;
         lucide.createIcons();
     </script>
